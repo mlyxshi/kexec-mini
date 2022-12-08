@@ -55,8 +55,8 @@ let
   '';
 in
 {
-
-  boot.initrd.kernelModules = [ "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console" ];
+  # Hyper-V and QEMU/KVM
+  boot.initrd.kernelModules = [ "hv_storvsc" "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console" ];
 
   boot.initrd.systemd.extraBin = {
     curl = "${pkgs.curl}/bin/curl";
