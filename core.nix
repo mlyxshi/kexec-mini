@@ -101,8 +101,8 @@ let cfg = config.nix-dabei; in
               # workaround https://github.com/NixOS/nix/issues/5076
               sandbox = false
 
-              substituters = https://cache.nixos.org https://nix-dabei.cachix.org
-              trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY= nix-dabei.cachix.org-1:sDW/xH60rYlBGKzHGFiVvSJpedy+n0CXe6ar3qqUuQk=
+              substituters = https://cache.nixos.org
+              trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
             '';
             "group".text = ''
               root:x:0:
