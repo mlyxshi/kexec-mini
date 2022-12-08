@@ -11,9 +11,9 @@ let
   kexecScript = pkgs.writeScript "kexec-boot" ''
     #!/usr/bin/env bash
     set -e   
-    echo "Downloading kexec-musl-bin" && curl -LO https://github.com/mlyxshi/nix-dabei/releases/download/latest/${kexec-musl-bin} && chmod +x ./${kexec-musl-bin}
-    echo "Downloading initrd" && curl -LO https://github.com/mlyxshi/nix-dabei/releases/download/latest/${initrdName}
-    echo "Downloading kernel" && curl -LO https://github.com/mlyxshi/nix-dabei/releases/download/latest/${kernelName}
+    echo "Downloading kexec-musl-bin" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/${kexec-musl-bin} && chmod +x ./${kexec-musl-bin}
+    echo "Downloading initrd" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/${initrdName}
+    echo "Downloading kernel" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/${kernelName}
 
     ssh_host_key=$(cat /etc/ssh/ssh_host_ed25519_key | base64 -w0)
     
@@ -24,7 +24,6 @@ let
         break
       fi     
     done
-
 
     echo "Wait... After SSH connection lost, ssh root@ip and enjoy NixOS!"
     ./${kexec-musl-bin} --kexec-syscall-auto --load ./${kernelName} --initrd=./${initrdName}  --command-line "init=/bin/init ${toString config.boot.kernelParams} ssh_host_key=$ssh_host_key ssh_authorized_key=$ssh_authorized_key $*"
