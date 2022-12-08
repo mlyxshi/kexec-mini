@@ -21,7 +21,7 @@
     then
       echo $host
     else
-      echo "No flake url defined for auto-installer"
+      echo "No host defined for auto-installer"
       exit 1
     fi
 
