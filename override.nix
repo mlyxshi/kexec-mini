@@ -50,16 +50,30 @@ let
 
     [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d text="NixOS installed successfully on $host"
         
-    for i in /etc/ssh/ssh_host_*; do cp $i /mnt/etc/ssh; done
+    for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/etc/ssh; done
     reboot
   '';
 in
 {
   # Hyper-V and QEMU/KVM
-  boot.initrd.kernelModules = [ "hv_storvsc" "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console" ];
+  boot.initrd.kernelModules = [ "efivarfs" "hv_storvsc" "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console" ];
 
   boot.initrd.systemd.extraBin = {
     curl = "${pkgs.curl}/bin/curl";
+    lf = "${pkgs.lf}/bin/lf";
+  };
+
+  boot.initrd.environment.etc = {
+    "lf/lfrc".text = ''
+      set hidden true
+      set number true
+      set drawbox true
+      set dircounts true
+      set incsearch true
+      set period 1
+      map Q   quit
+      map D   delete
+    '';
   };
 
   boot.initrd.systemd.services = {
