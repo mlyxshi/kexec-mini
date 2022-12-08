@@ -13,7 +13,6 @@
         modules = [
           ./core.nix
           ./build.nix
-          ./auto-installer.nix
           ./override.nix
         ];
       };

@@ -1,13 +1,7 @@
 # personal usage
-{pkgs, lib, config, modulesPath, ...}:{
-
-  boot.initrd.kernelModules = [ "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console" ];
-
-  boot.initrd.systemd.extraBin = {
-    curl = "${pkgs.curl}/bin/curl";
-  };
-
-  boot.initrd.systemd.services.auto-install.script = lib.mkForce ''
+{ pkgs, lib, config, ... }:
+let
+  installScript = ''
     # systemd.services.<name>.script will automatically set -e
     # If we don't set +e, the script will exit on the first error
     # nixos-enter --root /mnt -- /run/current-system/sw/bin/bootctl install
@@ -59,4 +53,25 @@
     for i in /etc/ssh/ssh_host_*; do cp $i /mnt/etc/ssh; done
     reboot
   '';
+in
+{
+
+  boot.initrd.kernelModules = [ "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console" ];
+
+  boot.initrd.systemd.extraBin = {
+    curl = "${pkgs.curl}/bin/curl";
+  };
+
+  boot.initrd.systemd.services = {
+    auto-installer = {
+      requires = [ "initrd-fs.target" "systemd-udevd.service" "network-online.target" ];
+      after = [ "initrd-fs.target" "systemd-udevd.service" "network-online.target" ];
+      requiredBy = [ "initrd.target" ];
+      before = [ "initrd.target" ];
+      unitConfig.DefaultDependencies = false;
+      serviceConfig.Type = "oneshot";
+      script = installScript;
+    };
+  };
+
 }
