@@ -24,4 +24,6 @@
     "systemd.log_target=console"
     "systemd.journald.forward_to_console=1"
   ];
+
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 }
