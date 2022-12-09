@@ -46,7 +46,7 @@ in
     ssh_authorized_key="$(cat ${./fixtures/id_ed25519.pub} | base64 -w0)"
     exec ${pkgs.qemu_kvm}/bin/qemu-kvm -name nix-dabei \
       -m 2048 \
-      -kernel ${kernelName} -initrd ${initrdName} \
+      -kernel ${config.system.build.kernel}/${kernelTarget}  -initrd ${config.system.build.initialRamdisk}/initrd.zst  \
       -append "console=ttyS0 init=/bin/init ${toString config.boot.kernelParams} ssh_host_key=$ssh_host_key ssh_authorized_key=$ssh_authorized_key flake_url=$flake_url" \
       -no-reboot -nographic \
       -net nic,model=virtio \
