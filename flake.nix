@@ -6,30 +6,28 @@
   inputs.nixpkgs.url = "github:phaer/nixpkgs/nix-dabei";
 
 
-  outputs = { self, nixpkgs }: {
-    nixosConfigurations = {
-      "kexec-x86_64" = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          ./host.nix
-          ./initrd.nix
-          ./kernelModules.nix
-          ./install.nix
-          ./build.nix
-        ];
-      };
+  outputs = { self, nixpkgs }:
+    let
+      commonModules = [
+        ./host.nix
+        ./initrd.nix
+        ./kernelModules.nix
+        ./install.nix
+        ./build.nix
+      ];
+    in
+    {
+      nixosConfigurations = {
+        "kexec-x86_64" = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = commonModules;
+        };
 
-      "kexec-aarch64" = nixpkgs.lib.nixosSystem {
-        system = "aarch64-linux";
-        modules = [
-          ./host.nix
-          ./initrd.nix
-          ./kernelModules.nix
-          ./install.nix
-          ./build.nix
-        ];
+        "kexec-aarch64" = nixpkgs.lib.nixosSystem {
+          system = "aarch64-linux";
+          modules = commonModules;
+        };
       };
     };
-  };
 
 }
