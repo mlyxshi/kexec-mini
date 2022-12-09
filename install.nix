@@ -48,7 +48,7 @@ let
       mount /dev/vda1 /mnt/boot  
     } 
 
-    [[ $locol_test -eq 1 ]] && localFormat || cloudFormat
+    [[  -n "$local_test" ]] && localFormat || cloudFormat
 
     # support UEFI systemd-boot
     mount -t efivarfs efivarfs /sys/firmware/efi/efivars
