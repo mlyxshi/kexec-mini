@@ -30,6 +30,9 @@
         ];
       };
     };
+
+
+    package.x86_64-linux.test= self.nixosConfigurations."kexec-x86_64".config.system.build.test;
   };
 
 }

@@ -38,4 +38,20 @@ in
     ln -s ${kexecScript}                                        $out/${kexecScriptName}
     ln -s ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/${kexec-musl-bin}
   '';
+
+
+  system.build.test = pkgs.writeShellScriptBin "installer-vm" ''
+    test -f disk.img || ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 disk.img 10G
+    ssh_host_key="$(cat ${../fixtures/ssh_host_ed25519_key} | base64 -w0)"
+    ssh_authorized_key="$(cat ${../fixtures/id_ed25519.pub} | base64 -w0)"
+    exec ${pkgs.qemu_kvm}/bin/qemu-kvm -name nix-dabei \
+      -m 2048 \
+      -kernel ${kernelName} -initrd ${initrdName} \
+      -append "console=ttyS0 init=/bin/init ${toString config.boot.kernelParams} ssh_host_key=$ssh_host_key ssh_authorized_key=$ssh_authorized_key flake_url=$flake_url" \
+      -no-reboot -nographic \
+      -net nic,model=virtio \
+      -net user,net=10.0.2.0/24,host=10.0.2.2,dns=10.0.2.3,hostfwd=tcp::2222-:22 \
+      -drive file=disk.img,format=qcow2,if=virtio \
+      -device virtio-rng-pci
+  '';
 }
