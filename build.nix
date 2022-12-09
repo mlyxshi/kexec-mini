@@ -42,8 +42,8 @@ in
 
   system.build.test = pkgs.writeShellScriptBin "installer-vm" ''
     test -f disk.img || ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 disk.img 10G
-    ssh_host_key="$(cat ${../fixtures/ssh_host_ed25519_key} | base64 -w0)"
-    ssh_authorized_key="$(cat ${../fixtures/id_ed25519.pub} | base64 -w0)"
+    ssh_host_key="$(cat ${./fixtures/ssh_host_ed25519_key} | base64 -w0)"
+    ssh_authorized_key="$(cat ${./fixtures/id_ed25519.pub} | base64 -w0)"
     exec ${pkgs.qemu_kvm}/bin/qemu-kvm -name nix-dabei \
       -m 2048 \
       -kernel ${kernelName} -initrd ${initrdName} \

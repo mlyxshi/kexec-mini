@@ -4,6 +4,6 @@ Modified for personal usage
 curl -sL https://github.com/mlyxshi/kexec-mini/releases/download/latest/kexec-$(uname -m) | bash -s
 
 
-nix run -L .#test
 chmod go-rwx fixtures/id_*
+nix run -L .#test
 ssh -oStrictHostKeyChecking=no -oUserKnownHostsFile=/dev/null -p 2222 -i fixtures/id_ed25519 root@localhost
