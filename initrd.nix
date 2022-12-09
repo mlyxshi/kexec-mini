@@ -4,11 +4,7 @@
     "resolv.conf".text = "nameserver 1.1.1.1\n"; # TODO replace with systemd-resolved upstream
     "ssl/certs/ca-certificates.crt".source = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
     "nix/nix.conf".text = ''
-      build-users-group =
       extra-experimental-features = nix-command flakes
-      # workaround https://github.com/NixOS/nix/issues/5076
-      sandbox = false
-
       substituters = https://cache.nixos.org
       trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
     '';
