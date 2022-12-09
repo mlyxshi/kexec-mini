@@ -48,8 +48,9 @@ let
       mkdir -p /mnt/boot
       mount /dev/vda1 /mnt/boot  
     } 
+
     local_test=$(get-kernel-param local_test)
-    [[  -n "$local_test" ]] && localFormat || cloudFormat
+    [[ -n "$local_test" ]] && localFormat || cloudFormat
 
     # support UEFI systemd-boot
     mount -t efivarfs efivarfs /sys/firmware/efi/efivars
