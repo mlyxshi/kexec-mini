@@ -3,7 +3,7 @@
 let
   installScript = ''
     # support UEFI systemd-boot
-    mount -t efivarfs efivarfs /sys/firmware/efi/efivars || true
+    mount -t efivarfs efivarfs /sys/firmware/efi/efivars
           
     host=$(get-kernel-param host)
     if [ -n "$host" ]
