@@ -1,10 +1,7 @@
 # personal usage
 { pkgs, lib, config, ... }:
 let
-  installScript = ''
-    # support UEFI systemd-boot
-    mount -t efivarfs efivarfs /sys/firmware/efi/efivars
-          
+  installScript = ''       
     host=$(get-kernel-param host)
     if [ -n "$host" ]
     then
@@ -13,6 +10,9 @@ let
       echo "No host defined for auto-installer"
       exit 1
     fi
+
+    # support UEFI systemd-boot
+    mount -t efivarfs efivarfs /sys/firmware/efi/efivars
 
     tg_id=$(get-kernel-param tg_id)
     tg_token=$(get-kernel-param tg_token)
