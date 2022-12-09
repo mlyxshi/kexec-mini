@@ -49,31 +49,8 @@ let
   '';
 in
 {
-  # Hyper-V and QEMU/KVM
-  boot.initrd.kernelModules = [ "efivarfs" "hv_storvsc" "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console" ];
-
-  boot.initrd.systemd.extraBin = {
-    curl = "${pkgs.curl}/bin/curl";
-    lf = "${pkgs.lf}/bin/lf";
-    lsmod = "${pkgs.kmod}/bin/lsmod";
-    modinfo = "${pkgs.kmod}/bin/modinfo";
-  };
-
-  boot.initrd.environment.etc = {
-    "lf/lfrc".text = ''
-      set hidden true
-      set number true
-      set drawbox true
-      set dircounts true
-      set incsearch true
-      set period 1
-      map Q   quit
-      map D   delete
-    '';
-  };
-
   boot.initrd.systemd.services = {
-    auto-installer = {
+    auto-install = {
       requires = [ "initrd-fs.target" "systemd-udevd.service" "network-online.target" ];
       after = [ "initrd-fs.target" "systemd-udevd.service" "network-online.target" ];
       requiredBy = [ "initrd.target" ];
@@ -83,5 +60,4 @@ in
       script = installScript;
     };
   };
-
 }

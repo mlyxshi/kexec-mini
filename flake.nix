@@ -11,18 +11,22 @@
       "kexec-x86_64" = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [
-          ./core.nix
+          ./host.nix
+          ./initrd.nix
+          ./kernelModules.nix
+          ./install.nix
           ./build.nix
-          ./override.nix
         ];
       };
 
       "kexec-aarch64" = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
         modules = [
-          ./core.nix
+          ./host.nix
+          ./initrd.nix
+          ./kernelModules.nix
+          ./install.nix
           ./build.nix
-          ./override.nix
         ];
       };
     };
