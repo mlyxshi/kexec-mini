@@ -52,6 +52,7 @@ in
       -net nic,model=virtio \
       -net user,net=10.0.2.0/24,host=10.0.2.2,dns=10.0.2.3,hostfwd=tcp::2222-:22 \
       -drive file=disk.img,format=qcow2,if=virtio \
-      -device virtio-rng-pci
+      -device virtio-rng-pci \
+      -bios ${pkgs.OVMF.fd}/FV/OVMF.fd 
   '';
 }
