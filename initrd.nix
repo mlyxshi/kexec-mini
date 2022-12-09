@@ -58,10 +58,7 @@
     setsid = "${pkgs.util-linux}/bin/setsid";
 
     awk = "${pkgs.gawk}/bin/awk";
-
-    # partitioning
     parted = "${pkgs.parted}/bin/parted";
-
     curl = "${pkgs.curl}/bin/curl";
     lf = "${pkgs.lf}/bin/lf";
 
