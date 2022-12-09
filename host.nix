@@ -17,7 +17,6 @@
   };
 
   boot.loader.grub.enable = false;
-  # This is used for kexec kernel parameters
   boot.kernelParams = [
     "systemd.show_status=true"
     "systemd.log_level=info"

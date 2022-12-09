@@ -24,6 +24,10 @@
       map Q   quit
       map D   delete
     '';
+
+    "profile".text = ''
+      alias r='lf'
+    '';
   };
 
 
@@ -58,6 +62,7 @@
     parted = "${pkgs.parted}/bin/parted";
     curl = "${pkgs.curl}/bin/curl";
     lf = "${pkgs.lf}/bin/lf";
+    nix-tree = "${pkgs.nix-tree}/bin/nix-tree";
 
     get-kernel-param = pkgs.writeScript "get-kernel-param" ''
       for o in $(< /proc/cmdline); do
