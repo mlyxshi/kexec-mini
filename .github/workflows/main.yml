@@ -27,11 +27,10 @@ jobs:
     
     # Details: github:mlyxshi/flake/host/oracle/us1.nix
     # Build aarch64 on Oracle ARM
-    # - run: |
-    #     KEXEC_AARCH64=$(ssh -o StrictHostKeyChecking=no root@us1.mlyxshi.com buildkexec-mini)
-    #     rsync -L -e "ssh -o StrictHostKeyChecking=no" root@us1.mlyxshi.com:$KEXEC_AARCH64/*  artifact2/
-    # /nix/store/2xasks0y8zrpv090vsh304qs3i24awky-nix-static-aarch64-unknown-linux-musl-2.11.1.drv' failed with exit code 2;
-    # disable now
+    - run: |
+        KEXEC_AARCH64=$(ssh -o StrictHostKeyChecking=no root@us1.mlyxshi.com buildkexec-mini)
+        rsync -L -e "ssh -o StrictHostKeyChecking=no" root@us1.mlyxshi.com:$KEXEC_AARCH64/*  artifact2/
+
 
     - uses: marvinpinto/action-automatic-releases@latest
       with:
@@ -40,4 +39,5 @@ jobs:
         prerelease: true
         files: |
           artifact1/*
+          artifact2/
 
