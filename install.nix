@@ -1,7 +1,7 @@
 # personal usage
 { pkgs, lib, config, ... }:
 let
-  installScript = ''       
+  installScript = ''
     host=$(get-kernel-param host)
     if [ -n "$host" ]
     then
@@ -11,28 +11,48 @@ let
       exit 1
     fi
 
-    # support UEFI systemd-boot
-    mount -t efivarfs efivarfs /sys/firmware/efi/efivars
-
     tg_id=$(get-kernel-param tg_id)
     tg_token=$(get-kernel-param tg_token)
     age_key=$(get-kernel-param age_key)
+    local_test=$(get-kernel-param local_test)
+    [[ $locol_test -eq 1 ]] && local || cloud
 
-    parted --script /dev/sda \
-    mklabel gpt \
-    mkpart "BOOT" fat32  1MiB  512MiB \
-    mkpart "NIXOS" ext4 512MiB 100% \
-    set 1 esp on 
+    cloud(){
+      parted --script /dev/sda \
+      mklabel gpt \
+      mkpart "BOOT" fat32  1MiB  512MiB \
+      mkpart "NIXOS" ext4 512MiB 100% \
+      set 1 esp on 
 
-    mkfs.fat -F32 /dev/sda1
-    mkfs.ext4 -F /dev/sda2 
+      mkfs.fat -F32 /dev/sda1
+      mkfs.ext4 -F /dev/sda2 
 
-    mkdir -p /mnt
-    mount /dev/sda2 /mnt
-    mkdir -p /mnt/boot
-    mount /dev/sda1 /mnt/boot
+      mkdir -p /mnt
+      mount /dev/sda2 /mnt
+      mkdir -p /mnt/boot
+      mount /dev/sda1 /mnt/boot  
+    }   
+
+    local(){
+      parted --script /dev/vda \
+      mklabel gpt \
+      mkpart "BOOT" fat32  1MiB  512MiB \
+      mkpart "NIXOS" ext4 512MiB 100% \
+      set 1 esp on 
+
+      mkfs.fat -F32 /dev/vda1
+      mkfs.ext4 -F /dev/vda2 
+
+      mkdir -p /mnt
+      mount /dev/vda2 /mnt
+      mkdir -p /mnt/boot
+      mount /dev/vda1 /mnt/boot  
+    }  
+
+    # support UEFI systemd-boot
+    mount -t efivarfs efivarfs /sys/firmware/efi/efivars
+
     mkdir -p /mnt/var/lib/age/ 
-
     [[ -n "$age_key" ]] && curl -sLo /mnt/var/lib/age/sshkey $age_key
 
     mkdir -p /mnt/{etc,tmp} && touch /mnt/etc/NIXOS
