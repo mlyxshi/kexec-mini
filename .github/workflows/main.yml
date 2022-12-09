@@ -16,10 +16,10 @@ jobs:
           trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
           substituters = https://cache.nixos.org
 
-    # - run: |
-    #     mkdir -m 0755  ~/.ssh
-    #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-    #     chmod 600 ~/.ssh/id_ed25519
+    - run: |
+        mkdir -m 0755  ~/.ssh
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+        chmod 600 ~/.ssh/id_ed25519
     
     - run: |
         KEXEC_X86_64=$(nix build --no-link --print-out-paths .#nixosConfigurations.kexec-x86_64.config.system.build.kexec)
@@ -27,9 +27,9 @@ jobs:
     
     # Details: github:mlyxshi/flake/host/oracle/us1.nix
     # Build aarch64 on Oracle ARM
-    # - run: |
-    #     KEXEC_AARCH64=$(ssh -o StrictHostKeyChecking=no root@us1.mlyxshi.com buildkexec)
-    #     rsync -L -e "ssh -o StrictHostKeyChecking=no" root@us1.mlyxshi.com:$KEXEC_AARCH64/*  artifact2/
+    - run: |
+        KEXEC_AARCH64=$(ssh -o StrictHostKeyChecking=no root@us1.mlyxshi.com buildkexec-mini)
+        rsync -L -e "ssh -o StrictHostKeyChecking=no" root@us1.mlyxshi.com:$KEXEC_AARCH64/*  artifact2/
 
     - uses: marvinpinto/action-automatic-releases@latest
       with:
@@ -38,3 +38,4 @@ jobs:
         prerelease: true
         files: |
           artifact1/*
+          artifact2/*
