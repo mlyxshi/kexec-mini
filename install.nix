@@ -14,8 +14,9 @@ let
     tg_id=$(get-kernel-param tg_id)
     tg_token=$(get-kernel-param tg_token)
     age_key=$(get-kernel-param age_key)
-    local_test=$(get-kernel-param local_test)
 
+    # real cloud provider: full virtualization, the device name is sda
+    # qemu local test: Paravirtualization, the device name is vda (-drive file=disk.img,format=qcow2,if=virtio)
     cloudFormat(){
       parted --script /dev/sda \
       mklabel gpt \
@@ -47,7 +48,7 @@ let
       mkdir -p /mnt/boot
       mount /dev/vda1 /mnt/boot  
     } 
-
+    local_test=$(get-kernel-param local_test)
     [[  -n "$local_test" ]] && localFormat || cloudFormat
 
     # support UEFI systemd-boot
@@ -66,7 +67,8 @@ let
     [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d text="NixOS installed successfully on $host"
         
     for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/etc/ssh; done
-    reboot
+    
+    [[  -n "$local_test" ]] && sleep 60 || reboot
   '';
 in
 {
