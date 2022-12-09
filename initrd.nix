@@ -57,6 +57,8 @@
     ssh-keygen = "${config.programs.ssh.package}/bin/ssh-keygen";
     setsid = "${pkgs.util-linux}/bin/setsid";
 
+    awk = "${pkgs.gawk}/bin/awk";
+
     # partitioning
     parted = "${pkgs.parted}/bin/parted";
 
@@ -137,11 +139,11 @@
     unitConfig.DefaultDependencies = false;
     serviceConfig.Type = "oneshot";
     script = ''
-      # root_fs_type="$(mount|awk '$3 == "/" { print $1 }')"
-      # if [ "$root_fs_type" != "tmpfs" ]; then
-          cp -R /bin /etc  /init  /lib  /nix  /root  /sbin  /var /sysroot
-          systemctl --no-block switch-root /sysroot /bin/init
-      # fi
+      root_fs_type="$(mount|awk '$3 == "/" { print $1 }')"
+      if [ "$root_fs_type" != "tmpfs" ]; then
+        cp -R /bin /etc  /init  /lib  /nix  /root  /sbin  /var /sysroot
+        systemctl --no-block switch-root /sysroot /bin/init
+      fi
     '';
   };
 
