@@ -7,6 +7,7 @@
       extra-experimental-features = nix-command flakes
       substituters = https://cache.nixos.org
       trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
+      build-users-group =
     '';
     "group".text = ''
       root:x:0:
