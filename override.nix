@@ -2,13 +2,8 @@
 { pkgs, lib, config, ... }:
 let
   installScript = ''
-    # systemd.services.<name>.script will automatically set -e
-    # If we don't set +e, the script will exit on the first error
-    # nixos-enter --root /mnt -- /run/current-system/sw/bin/bootctl install
-    # nixos-enter --root /mnt -- /run/current-system/bin/switch-to-configuration boot
-    # will fail with error code 1, However, these errors are acceptable.(Not Functional Errors)
-      
-    set +e
+    # support UEFI systemd-boot
+    mount -t efivarfs efivarfs /sys/firmware/efi/efivars || true
           
     host=$(get-kernel-param host)
     if [ -n "$host" ]
@@ -45,8 +40,7 @@ let
     --extra-trusted-public-keys "cache.mlyxshi.com:qbWevQEhY/rV6wa21Jaivh+Lw2AArTFwCB2J6ll4xOI=" \
     --extra-substituters "http://cache.mlyxshi.com" -v
 
-    nixos-enter --root /mnt -- /run/current-system/sw/bin/bootctl install
-    nixos-enter --root /mnt -- /run/current-system/bin/switch-to-configuration boot
+    NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root /mnt -- /run/current-system/bin/switch-to-configuration boot
 
     [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d text="NixOS installed successfully on $host"
         
