@@ -15,9 +15,8 @@ let
     tg_token=$(get-kernel-param tg_token)
     age_key=$(get-kernel-param age_key)
     local_test=$(get-kernel-param local_test)
-    [[ $locol_test -eq 1 ]] && local || cloud
 
-    cloud(){
+    cloudFormat(){
       parted --script /dev/sda \
       mklabel gpt \
       mkpart "BOOT" fat32  1MiB  512MiB \
@@ -33,7 +32,7 @@ let
       mount /dev/sda1 /mnt/boot  
     }   
 
-    local(){
+    localFormat(){
       parted --script /dev/vda \
       mklabel gpt \
       mkpart "BOOT" fat32  1MiB  512MiB \
@@ -47,7 +46,9 @@ let
       mount /dev/vda2 /mnt
       mkdir -p /mnt/boot
       mount /dev/vda1 /mnt/boot  
-    }  
+    } 
+
+    [[ $locol_test -eq 1 ]] && localFormat || cloudFormat
 
     # support UEFI systemd-boot
     mount -t efivarfs efivarfs /sys/firmware/efi/efivars
