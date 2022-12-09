@@ -68,7 +68,8 @@ let
         
     for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/etc/ssh; done
     
-    [[  -n "$local_test" ]] && sleep 60 || reboot
+    # in local test, we force exit 1 and use emergency shell to debug
+    [[  -n "$local_test" ]] && exit 1 || reboot
   '';
 in
 {
