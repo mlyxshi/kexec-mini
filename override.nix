@@ -55,6 +55,8 @@ in
   boot.initrd.systemd.extraBin = {
     curl = "${pkgs.curl}/bin/curl";
     lf = "${pkgs.lf}/bin/lf";
+    lsmod = "${pkgs.kmod}/bin/lsmod";
+    modinfo = "${pkgs.kmod}/bin/modinfo";
   };
 
   boot.initrd.environment.etc = {
