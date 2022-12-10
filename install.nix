@@ -15,8 +15,8 @@ let
     tg_token=$(get-kernel-param tg_token)
     age_key=$(get-kernel-param age_key)
 
-    # real cloud provider: full virtualization, the device name is sda
-    # qemu local test: Paravirtualization, the device name is vda (-drive file=disk.img,format=qcow2,if=virtio)
+    # real cloud provider: full virtualization, device name is sda
+    # qemu local test: Paravirtualization, device name is vda (-drive file=disk.img,format=qcow2,if=virtio)
     cloudFormat(){
       parted --script /dev/sda \
       mklabel gpt \
@@ -70,7 +70,7 @@ let
     for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/etc/ssh; done
     
     # in local test, we force exit 1 and use emergency shell to debug
-    [[  -n "$local_test" ]] && exit 1 || reboot
+    [[ -n "$local_test" ]] && exit 1 || reboot
   '';
 in
 {

@@ -40,7 +40,7 @@ in
   '';
 
 
-  system.build.test = pkgs.writeShellScriptBin "installer-vm" ''
+  system.build.test = pkgs.writeShellScriptBin "test-vm" ''
     test -f disk.img || ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 disk.img 10G
     host=sw2
     local_test=1

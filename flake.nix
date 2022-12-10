@@ -28,6 +28,8 @@
           modules = commonModules;
         };
       };
+
+      apps.x86_64-linux.default = self.nixosConfigurations."kexec-x86_64".config.system.build.test;
     };
 
 }
