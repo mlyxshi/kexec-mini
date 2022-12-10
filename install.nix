@@ -2,12 +2,12 @@
 { pkgs, lib, config, ... }:
 let
   installScript = ''
-    host=$(get-kernel-param host)
-    if [ -n "$host" ]
+    flake_url=$(get-kernel-param flake_url)
+    if [ -n "$flake_url" ]
     then
-      echo $host
+      echo $flake_url
     else
-      echo "No host defined for auto-installer"
+      echo "No flake_url defined for auto-installer"
       exit 1
     fi
 
@@ -59,13 +59,13 @@ let
     [[ -n "$age_key" ]] && curl -sLo /mnt/var/lib/age/sshkey $age_key
 
     mkdir -p /mnt/{etc,tmp} && touch /mnt/etc/NIXOS
-    nix build  --store /mnt --profile /mnt/nix/var/nix/profiles/system  $host.config.system.build.toplevel \
+    nix build  --store /mnt --profile /mnt/nix/var/nix/profiles/system  $flake_url.config.system.build.toplevel \
     --extra-trusted-public-keys "cache.mlyxshi.com:qbWevQEhY/rV6wa21Jaivh+Lw2AArTFwCB2J6ll4xOI=" \
     --extra-substituters "http://cache.mlyxshi.com" -v
 
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root /mnt -- /run/current-system/bin/switch-to-configuration boot
 
-    [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d text="<b>Install NixOS Completed</b>%0A$host"
+    [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d text="<b>Install NixOS Completed</b>%0A$flake_url"
         
     for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/etc/ssh; done
     
