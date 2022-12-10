@@ -59,13 +59,13 @@ let
     [[ -n "$age_key" ]] && curl -sLo /mnt/var/lib/age/sshkey $age_key
 
     mkdir -p /mnt/{etc,tmp} && touch /mnt/etc/NIXOS
-    nix build  --store /mnt --profile /mnt/nix/var/nix/profiles/system  github:mlyxshi/flake#nixosConfigurations.$host.config.system.build.toplevel \
+    nix build  --store /mnt --profile /mnt/nix/var/nix/profiles/system  $host.config.system.build.toplevel \
     --extra-trusted-public-keys "cache.mlyxshi.com:qbWevQEhY/rV6wa21Jaivh+Lw2AArTFwCB2J6ll4xOI=" \
     --extra-substituters "http://cache.mlyxshi.com" -v
 
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root /mnt -- /run/current-system/bin/switch-to-configuration boot
 
-    [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d text="NixOS installed successfully on $host"
+    [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d text="<b>Install NixOS Completed</b>%0A$host"
         
     for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/etc/ssh; done
     

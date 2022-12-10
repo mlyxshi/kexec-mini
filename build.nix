@@ -42,7 +42,7 @@ in
 
   system.build.test = pkgs.writeShellScriptBin "test-vm" ''
     test -f disk.img || ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 disk.img 10G
-    host=sw2
+    host=github:mlyxshi/kexec-mini#nixosConfigurations.demo
     local_test=1
     exec ${pkgs.qemu_kvm}/bin/qemu-kvm -name ${config.networking.hostName} \
       -m 2048 \
