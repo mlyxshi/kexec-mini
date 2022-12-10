@@ -10,5 +10,5 @@ curl -sL https://github.com/mlyxshi/kexec-mini/releases/download/latest/kexec-$(
 ```
 # Test
 ```
-nix run -L .#nixosConfigurations.kexec-x86_64.config.system.build.test
+nix run -L .#
 ```
