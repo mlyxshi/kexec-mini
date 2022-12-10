@@ -65,7 +65,7 @@ let
 
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root /mnt -- /run/current-system/bin/switch-to-configuration boot
 
-    [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d text="<b>Install NixOS Completed</b>%0A$flake_url"
+    [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d parse_mode=html -d text="<b>Install NixOS Completed</b>%0A$flake_url"
         
     for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/etc/ssh; done
     
