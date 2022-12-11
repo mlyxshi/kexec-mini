@@ -22,9 +22,12 @@ let
     mkpart "NIXOS" ext4 512MiB 100% \
     set 1 esp on 
 
-    # mkfs do not support symblink, so we need to manually resolve it
-    mkfs.fat -F32 $([ -L /dev/sda1 ] && echo /dev/vda1 || echo /dev/sda1)
-    mkfs.ext4 -F  $([ -L /dev/sda2 ] && echo /dev/vda1 || echo /dev/sda2) 
+    # I create a udev rule: boot.initrd.services.udev.rules = "KERNEL==\"vda*\", SYMLINK+=\"sda%n\"\n";
+    # mkfs do not support symblink, so we need to this extra step 
+    [ -L /dev/sda1 ] && device1=/dev/vda1 || device1=/dev/sda1
+    [ -L /dev/sda2 ] && device2=/dev/vda2 || device1=/dev/sda2
+    mkfs.fat -F32 $device1
+    mkfs.ext4 -F  $device2 
 
     mkdir -p /mnt
     mount /dev/sda2 /mnt
