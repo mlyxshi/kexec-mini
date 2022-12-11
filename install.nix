@@ -14,45 +14,23 @@ let
     tg_id=$(get-kernel-param tg_id)
     tg_token=$(get-kernel-param tg_token)
     age_key=$(get-kernel-param age_key)
-
-    # real cloud provider: full virtualization, device name is sda
-    # qemu local test: Paravirtualization, device name is vda (-drive file=disk.img,format=qcow2,if=virtio)
-    cloudFormat(){
-      parted --script /dev/sda \
-      mklabel gpt \
-      mkpart "BOOT" fat32  1MiB  512MiB \
-      mkpart "NIXOS" ext4 512MiB 100% \
-      set 1 esp on 
-
-      mkfs.fat -F32 /dev/sda1
-      mkfs.ext4 -F /dev/sda2 
-
-      mkdir -p /mnt
-      mount /dev/sda2 /mnt
-      mkdir -p /mnt/boot
-      mount /dev/sda1 /mnt/boot  
-    }   
-
-    localFormat(){
-      exit 1
-      parted --script /dev/vda \
-      mklabel gpt \
-      mkpart "BOOT" fat32  1MiB  512MiB \
-      mkpart "NIXOS" ext4 512MiB 100% \
-      set 1 esp on 
-
-      mkfs.fat -F32 /dev/vda1
-      mkfs.ext4 -F /dev/vda2 
-
-      mkdir -p /mnt
-      mount /dev/vda2 /mnt
-      mkdir -p /mnt/boot
-      mount /dev/vda1 /mnt/boot  
-    } 
-
     local_test=$(get-kernel-param local_test)
-    [[ -n "$local_test" ]] && localFormat || cloudFormat
 
+    parted --script /dev/sda \
+    mklabel gpt \
+    mkpart "BOOT" fat32  1MiB  512MiB \
+    mkpart "NIXOS" ext4 512MiB 100% \
+    set 1 esp on 
+
+    mkfs.fat -F32 /dev/sda1
+    mkfs.ext4 -F /dev/sda2 
+
+    mkdir -p /mnt
+    mount /dev/sda2 /mnt
+    mkdir -p /mnt/boot
+    mount /dev/sda1 /mnt/boot  
+     
+    
     # support UEFI systemd-boot
     mount -t efivarfs efivarfs /sys/firmware/efi/efivars
 

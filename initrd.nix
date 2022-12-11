@@ -34,7 +34,9 @@
   boot.initrd.systemd.enable = true;
   boot.initrd.systemd.emergencyAccess = true;
 
-
+  # real cloud provider: full virtualization, device name is sda
+  # qemu local test: Paravirtualization, device name is vda (-drive file=disk.img,format=qcow2,if=virtio)
+  # This udev rule sysmlinks vda to sda so that the installer can find the disk.
   boot.initrd.services.udev.rules = "KERNEL==\"vd*\", SYMLINK+=\"sda%n\"\n";
 
   # This is the upstream expression, just with bashInteractive instead of bash.
