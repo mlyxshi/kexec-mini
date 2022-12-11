@@ -34,6 +34,9 @@
   boot.initrd.systemd.enable = true;
   boot.initrd.systemd.emergencyAccess = true;
 
+
+  boot.initrd.services.udev.rules = "KERNEL==\"vda\", , NAME=\"sda\"\n";
+
   # This is the upstream expression, just with bashInteractive instead of bash.
   boot.initrd.systemd.initrdBin =
     let

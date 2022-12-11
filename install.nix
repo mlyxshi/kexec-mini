@@ -18,6 +18,7 @@ let
     # real cloud provider: full virtualization, device name is sda
     # qemu local test: Paravirtualization, device name is vda (-drive file=disk.img,format=qcow2,if=virtio)
     cloudFormat(){
+      exit 1
       parted --script /dev/sda \
       mklabel gpt \
       mkpart "BOOT" fat32  1MiB  512MiB \
