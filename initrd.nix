@@ -37,7 +37,7 @@
   # real cloud provider: full virtualization, device name is sda
   # qemu local test: Paravirtualization, device name is vda (-drive file=disk.img,format=qcow2,if=virtio)
   # This udev rule sysmlinks vda to sda so that the installer script can only use one device name.
-  boot.initrd.services.udev.rules = "KERNEL==\"vda*\", SYMLINK+=\"sda%n\"\n";
+  boot.initrd.services.udev.rules = ''KERNEL=="vda*", SYMLINK+="sda%n'';
 
   # This is the upstream expression, just with bashInteractive instead of bash.
   boot.initrd.systemd.initrdBin =
