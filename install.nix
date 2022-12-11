@@ -24,12 +24,12 @@ let
 
     sleep 3
 
-    # I create a udev rule: boot.initrd.services.udev.rules = "KERNEL==\"vda*\", SYMLINK+=\"sda%n\"\n";
+    # I create a udev rule: boot.initrd.services.udev.rules
     # mkfs do not support symblink, so we need to this extra step 
-    [ -L /dev/sda1 ] && device1=/dev/vda1 || device1=/dev/sda1
-    [ -L /dev/sda2 ] && device2=/dev/vda2 || device2=/dev/sda2
-    mkfs.fat -F32 $device1
-    mkfs.ext4 -F  $device2 
+    [ -L /dev/sda1 ] && espDevice=/dev/vda1 || espDevice=/dev/sda1
+    [ -L /dev/sda2 ] && osDevice=/dev/vda2 || osDevice=/dev/sda2
+    mkfs.fat -F32 $espDevice
+    mkfs.ext4 -F  $osDevice 
 
     mkdir -p /mnt
     mount /dev/sda2 /mnt
