@@ -22,6 +22,8 @@ let
     mkpart "NIXOS" ext4 512MiB 100% \
     set 1 esp on 
 
+    sleep 3
+
     # I create a udev rule: boot.initrd.services.udev.rules = "KERNEL==\"vda*\", SYMLINK+=\"sda%n\"\n";
     # mkfs do not support symblink, so we need to this extra step 
     [ -L /dev/sda1 ] && device1=/dev/vda1 || device1=/dev/sda1
