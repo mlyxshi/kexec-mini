@@ -22,14 +22,14 @@ let
     mkpart "NIXOS" ext4 512MiB 100% \
     set 1 esp on 
 
-    mkfs.fat -F32 /dev/sda1
-    mkfs.ext4 -F /dev/sda2 
+    # mkfs do not support symblink, so we need to manually resolve it
+    mkfs.fat -F32 $([[ -L /dev/sda1 ]] && echo $(readlink -f /dev/sda1) || echo /dev/sda1)
+    mkfs.ext4 -F  $([[ -L /dev/sda2 ]] && echo $(readlink -f /dev/sda2) || echo /dev/sda2) 
 
     mkdir -p /mnt
     mount /dev/sda2 /mnt
     mkdir -p /mnt/boot
     mount /dev/sda1 /mnt/boot  
-     
     
     # support UEFI systemd-boot
     mount -t efivarfs efivarfs /sys/firmware/efi/efivars
