@@ -23,8 +23,8 @@ let
     set 1 esp on 
 
     # mkfs do not support symblink, so we need to manually resolve it
-    mkfs.fat -F32 $([[ -L /dev/sda1 ]] && echo $(readlink -f /dev/sda1) || echo /dev/sda1)
-    mkfs.ext4 -F  $([[ -L /dev/sda2 ]] && echo $(readlink -f /dev/sda2) || echo /dev/sda2) 
+    mkfs.fat -F32 $([ -L /dev/sda1 ] && echo /dev/vda1 || echo /dev/sda1)
+    mkfs.ext4 -F  $([ -L /dev/sda2 ] && echo /dev/vda1 || echo /dev/sda2) 
 
     mkdir -p /mnt
     mount /dev/sda2 /mnt
