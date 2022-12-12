@@ -22,14 +22,10 @@ let
     mkpart "NIXOS" ext4 512MiB 100% \
     set 1 esp on 
 
-    sleep 3
+    sleep 3 # need time for create symbolic link, if device is /dev/vda
 
-    # I create a udev rule: boot.initrd.services.udev.rules
-    # mkfs do not support symlink, so we need to this extra step 
-    [ -L /dev/sda1 ] && espDevice=/dev/vda1 || espDevice=/dev/sda1
-    [ -L /dev/sda2 ] && osDevice=/dev/vda2 || osDevice=/dev/sda2
-    mkfs.fat -F32 $espDevice
-    mkfs.ext4 -F  $osDevice 
+    mkfs.fat -F32 /dev/sda1
+    mkfs.ext4 -F  /dev/sda2
 
     mkdir -p /mnt
     mount /dev/sda2 /mnt
