@@ -27,7 +27,7 @@ let
 
     echo "Wait... After SSH connection lost, ssh root@ip and enjoy NixOS!"
     ./${kexec-musl-bin} --kexec-syscall-auto --load ./${kernelName} --initrd=./${initrdName}  --append "init=/bin/init ${toString config.boot.kernelParams} ssh_host_key=$ssh_host_key ssh_authorized_key=$ssh_authorized_key $*"
-    ./${kexec-musl-bin} -e
+    systemctl --no-block kexec 
   '';
 in
 {

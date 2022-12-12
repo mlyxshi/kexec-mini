@@ -83,9 +83,10 @@
 
 
   # ssh
-  boot.initrd.systemd.network.wait-online.anyInterface = true;
-  boot.initrd.systemd.network.networks = { }; # dhcp
+
   boot.initrd.network.enable = true;
+  boot.initrd.systemd.network.enable = true;
+  boot.initrd.systemd.network.wait-online.anyInterface = true;
   boot.initrd.network.ssh.enable = true;
   boot.initrd.systemd.services.setup-ssh-authorized-keys = {
     requires = [ "initrd-fs.target" ];
