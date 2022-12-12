@@ -91,9 +91,7 @@
   boot.initrd.systemd.services.setup-ssh-authorized-keys = {
     requires = [ "initrd-fs.target" ];
     after = [ "initrd-fs.target" ];
-    requiredBy = [ "sshd.service" ];
     before = [ "sshd.service" ];
-    unitConfig.DefaultDependencies = false;
     serviceConfig.Type = "oneshot";
     script = ''
       mkdir -p /etc/ssh/authorized_keys.d
@@ -105,14 +103,13 @@
          echo "Using ssh authorized key from kernel parameter"
       fi
     '';
+    requiredBy = [ "sshd.service" ];
   };
 
   boot.initrd.systemd.services.generate-ssh-host-key = {
     requires = [ "initrd-fs.target" ];
     after = [ "initrd-fs.target" ];
-    requiredBy = [ "sshd.service" ];
     before = [ "sshd.service" ];
-    unitConfig.DefaultDependencies = false;
     serviceConfig.Type = "oneshot";
     script = ''
       mkdir -p /etc/ssh/
@@ -129,33 +126,15 @@
          echo "Generated new ssh host key"
       fi
     '';
+    requiredBy = [ "sshd.service" ];
   };
 
 
-  # move everything in / to /sysroot and switch-root into
-  # it. This runs a few things twice and wastes some memory
-  # but is necessary for nix --store flag as pivot_root does
-  # not work on rootfs.
-  boot.initrd.systemd.services.remount-root = {
-    requires = [ "systemd-udevd.service" "initrd-root-fs.target" ];
-    after = [ "systemd-udevd.service" ];
-    requiredBy = [ "initrd-fs.target" ];
-    before = [ "initrd-fs.target" ];
 
-    unitConfig.DefaultDependencies = false;
-    serviceConfig.Type = "oneshot";
-    script = ''
-      root_fs_type="$(mount|awk '$3 == "/" { print $1 }')"
-      if [ "$root_fs_type" != "tmpfs" ]; then
-        cp -R /bin /etc  /init  /lib  /nix  /root  /sbin  /var /sysroot
-        systemctl --no-block switch-root /sysroot /bin/init
-      fi
-    '';
-  };
-
-
-  # keep in stage 1
+  # Disable default services in Nixpkgs
+  boot.initrd.systemd.services.initrd-nixos-activation.enable = false;
   boot.initrd.systemd.services.initrd-switch-root.enable = false;
+  # keep in stage 1
   boot.initrd.systemd.services.initrd-cleanup.enable = false;
   boot.initrd.systemd.services.initrd-parse-etc.enable = false;
 

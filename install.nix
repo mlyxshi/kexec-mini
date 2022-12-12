@@ -54,15 +54,28 @@ let
   '';
 in
 {
-  boot.initrd.systemd.services = {
-    auto-install = {
-      requires = [ "initrd-fs.target" "systemd-udevd.service" "network-online.target" ];
-      after = [ "initrd-fs.target" "systemd-udevd.service" "network-online.target" ];
-      requiredBy = [ "initrd.target" ];
-      before = [ "initrd.target" ];
-      unitConfig.DefaultDependencies = false;
-      serviceConfig.Type = "oneshot";
-      script = installScript;
-    };
+  boot.initrd.systemd.services.auto-install = {
+    requires = [ "network-online.target" ];
+    after = [ "initrd-fs.target" "network-online.target" ];
+    before = [ "initrd.target" ];
+    serviceConfig.Type = "oneshot";
+    script = installScript;
+    requiredBy = [ "initrd.target" ];
+  };
+
+  # move everything in / to /sysroot and switch-root into it. 
+  # This runs a few things twice and wastes some memory
+  # but is necessary for nix --store flag as pivot_root does not work on rootfs.
+  boot.initrd.systemd.services.remount-root = {
+    before = [ "initrd-fs.target" ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      root_fs_type="$(mount|awk '$3 == "/" { print $1 }')"
+      if [ "$root_fs_type" != "tmpfs" ]; then
+        cp -R /bin /etc /init /lib /nix /sbin /var /sysroot
+        systemctl --no-block switch-root /sysroot /bin/init
+      fi
+    '';
+    requiredBy = [ "initrd-fs.target" ];
   };
 }
