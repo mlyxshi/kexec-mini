@@ -1,6 +1,6 @@
 {
   # Systemd stage 1 networkd: https://github.com/NixOS/nixpkgs/pull/169116
-  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable/pull/169116/head";
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/pull/169116/head";
   outputs = { self, nixpkgs }:
     let
       commonModules = [
