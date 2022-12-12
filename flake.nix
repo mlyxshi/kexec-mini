@@ -10,6 +10,7 @@
     let
       commonModules = [
         ./host.nix
+        ./net.nix
         ./initrd.nix
         ./kernelModules.nix
         ./install.nix
