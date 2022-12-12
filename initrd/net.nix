@@ -4,7 +4,6 @@
   boot.initrd.systemd.network.wait-online.anyInterface = true;
   boot.initrd.network.ssh.enable = true;
   boot.initrd.systemd.services.setup-ssh-authorized-keys = {
-    #requires = [ "initrd-fs.target" ];
     after = [ "initrd-fs.target" ];
     before = [ "sshd.service" ];
     serviceConfig.Type = "oneshot";
@@ -22,13 +21,11 @@
   };
 
   boot.initrd.systemd.services.generate-ssh-host-key = {
-    #requires = [ "initrd-fs.target" ];
     after = [ "initrd-fs.target" ];
     before = [ "sshd.service" ];
     serviceConfig.Type = "oneshot";
     script = ''
       mkdir -p /etc/ssh/
-
       param="$(get-kernel-param "ssh_host_key")"
       if [ -n "$param" ]; then
          umask 177

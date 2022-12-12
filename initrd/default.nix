@@ -2,6 +2,7 @@
   imports = [
     ./install.nix
     ./net.nix
+    ./kernelModules.nix
   ];
 
   boot.initrd.environment.etc = {
