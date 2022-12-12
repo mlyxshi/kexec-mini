@@ -1,11 +1,6 @@
 {
-  description = "A minimal initrd, capable of running sshd and nix.";
-  # this is a temporary fork including the changes from
-  # https://github.com/NixOS/nixpkgs/pull/169116/files
-  # (rebased on master from time to time)
-  inputs.nixpkgs.url = "github:phaer/nixpkgs/nix-dabei";
-
-
+  # Systemd stage 1 networkd: https://github.com/NixOS/nixpkgs/pull/169116
+  inputs.nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable/pull/169116/head";
   outputs = { self, nixpkgs }:
     let
       commonModules = [
