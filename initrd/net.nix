@@ -4,9 +4,9 @@
   boot.initrd.systemd.network.wait-online.anyInterface = true;
   boot.initrd.network.ssh.enable = true;
   boot.initrd.systemd.services.setup-ssh-authorized-keys = {
-    requires = [ "initrd-fs.target" ];
+    #requires = [ "initrd-fs.target" ];
     after = [ "initrd-fs.target" ];
-    #before = [ "sshd.service" ];
+    before = [ "sshd.service" ];
     serviceConfig.Type = "oneshot";
     script = ''
       mkdir -p /etc/ssh/authorized_keys.d
@@ -22,9 +22,9 @@
   };
 
   boot.initrd.systemd.services.generate-ssh-host-key = {
-    requires = [ "initrd-fs.target" ];
+    #requires = [ "initrd-fs.target" ];
     after = [ "initrd-fs.target" ];
-    #before = [ "sshd.service" ];
+    before = [ "sshd.service" ];
     serviceConfig.Type = "oneshot";
     script = ''
       mkdir -p /etc/ssh/

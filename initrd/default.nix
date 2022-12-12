@@ -1,4 +1,9 @@
 { config, pkgs, lib, ... }: {
+  imports = [
+    ./install.nix
+    ./net.nix
+  ];
+
   boot.initrd.environment.etc = {
     "hostname".text = "${config.networking.hostName}\n";
     "resolv.conf".text = "nameserver 1.1.1.1\n"; # TODO replace with systemd-resolved upstream

@@ -10,10 +10,8 @@
     let
       commonModules = [
         ./host.nix
-        ./net.nix
-        ./initrd.nix
+        ./initrd
         ./kernelModules.nix
-        ./install.nix
         ./build.nix
       ];
     in
