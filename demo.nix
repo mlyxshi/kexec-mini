@@ -8,7 +8,7 @@
 
   fileSystems = {
     "/boot" = {
-      device = "/dev/disk/by-label/BOOT";
+      device = "/dev/disk/by-partlabel/BOOT";
       fsType = "vfat";
     };
     "/" = {
@@ -16,12 +16,12 @@
       options = [ "mode=755" ];
     };
     "/nix"={
-      device = "/dev/disk/by-label/NIXOS";
+      device = "/dev/disk/by-partlabel/NIXOS";
       fsType = "btrfs";
       options = [ "subvol=nix" "noatime" "compress-force=zstd" ];
     };
     "/persist" = {
-      device = "/dev/disk/by-label/NIXOS";
+      device = "/dev/disk/by-partlabel/NIXOS";
       fsType = "btrfs";
       options = [ "subvol=persist" "noatime" "compress-force=zstd" ];
       # neededForBoot = true;
