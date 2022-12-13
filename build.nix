@@ -15,11 +15,17 @@ let
     echo "Downloading initrd" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/${initrdName}
     echo "Downloading kernel" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/${kernelName}
 
-    ssh_host_key=$(cat /etc/ssh/ssh_host_ed25519_key | base64 -w0)
+    for i in /etc/ssh/ssh_host_ed25519_key /persist/etc/ssh/ssh_host_ed25519_key; do
+      if [[ -e $i && -s $i ]]; then 
+        echo "Get ssh_host_ed25519_key from: $i"
+        ssh_host_key=$(cat $i | base64 -w0)
+        break
+      fi     
+    done
     
     for i in /home/$SUDO_USER/.ssh/authorized_keys /root/.ssh/authorized_keys /etc/ssh/authorized_keys.d/root; do
       if [[ -e $i && -s $i ]]; then 
-        echo "Get SSH authorized_keys from: $i"
+        echo "Get authorized_keys from: $i"
         ssh_authorized_key=$(cat $i | base64 -w0)
         break
       fi     
