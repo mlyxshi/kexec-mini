@@ -3,7 +3,7 @@ Based on [dep-sys/nix-dabei](https://github.com/dep-sys/nix-dabei/)
 
 Modified for personal usage
 
-Only support ext4 and vfat
+Only support btrfs and vfat
 ```
 remount-root.service  [ switch-root is required, because nix --store do not support rootfs ]
     |

@@ -1,21 +1,32 @@
 # This is only for testing [nix build] and [switch-to-configuration boot] functionality
 # It actually can not boot
-{ config, pkgs, lib, ... }: {
-  time.timeZone = "America/Los_Angeles";
+{ lib, ... }: {
+  time.timeZone = "UTC";
   i18n.defaultLocale = "en_US.UTF-8";
   system.stateVersion = lib.trivial.release;
   documentation.enable = false;
 
-  fileSystems."/boot" = {
-    device = "/dev/sda1";
-    fsType = "vfat";
+  fileSystems = {
+    "/boot" = {
+      device = "/dev/disk/by-label/BOOT";
+      fsType = "vfat";
+    };
+    "/" = {
+      fsType = "tmpfs";
+      options = [ "mode=755" ];
+    };
+    "/nix"={
+      device = "/dev/disk/by-label/NIXOS";
+      fsType = "btrfs";
+      options = [ "subvol=nix" "noatime" "compress-force=zstd" ];
+    };
+    "/persist" = {
+      device = "/dev/disk/by-label/NIXOS";
+      fsType = "btrfs";
+      options = [ "subvol=persist" "noatime" "compress-force=zstd" ];
+      # neededForBoot = true;
+    };
   };
-
-  fileSystems."/" = {
-    device = "/dev/sda2";
-    fsType = "ext4";
-  };
-
   boot.initrd.systemd.enable = true;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

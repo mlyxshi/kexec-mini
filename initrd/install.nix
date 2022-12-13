@@ -18,19 +18,25 @@ let
 
     parted --script /dev/sda \
     mklabel gpt \
-    mkpart "BOOT" fat32  1MiB  512MiB \
-    mkpart "NIXOS" ext4 512MiB 100% \
+    mkpart "BOOT"  fat32  1MiB    512MiB \
+    mkpart "NIXOS" btrfs  512MiB  100% \
     set 1 esp on 
 
-    sleep 3 # need time for create symbolic link, if device is /dev/vda
+    sleep 2
 
-    mkfs.fat -F 32 /dev/sda1
-    mkfs.ext4 /dev/sda2
+    NIXOS=/dev/disk/by-partlabel/NIXOS
+    mkfs.fat -F 32 /dev/disk/by-partlabel/BOOT
+    mkfs.btrfs $NIXOS
 
-    mkdir -p /mnt
-    mount /dev/sda2 /mnt
-    mkdir -p /mnt/boot
-    mount /dev/sda1 /mnt/boot  
+    mkdir -p /fsroot
+    mount $NIXOS /fsroot
+    btrfs subvol create /fsroot/nix
+    btrfs subvol create /fsroot/persist
+
+    mkdir -p /mnt/{boot,nix,persist}
+    mount /dev/disk/by-partlabel/BOOT /mnt/boot
+    mount -o subvol=nix,compress-force=zstd    $NIXOS /mnt/nix
+    mount -o subvol=persist,compress-force=zstd $NIXOS /mnt/persist
     
     # support UEFI systemd-boot
     mount -t efivarfs efivarfs /sys/firmware/efi/efivars

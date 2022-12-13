@@ -1,7 +1,7 @@
 { config, pkgs, lib, ... }: {
   imports = [
     ./install.nix
-    ./net.nix
+    ./network.nix
     ./kernelModules.nix
   ];
 
@@ -52,7 +52,7 @@
     let
       systemd = config.boot.initrd.systemd.package;
     in
-    lib.mkForce ([ pkgs.bashInteractive pkgs.coreutils systemd.kmod systemd ] ++ [ pkgs.dosfstools pkgs.e2fsprogs ]);
+    lib.mkForce ([ pkgs.bashInteractive pkgs.coreutils systemd.kmod systemd ] ++ [ pkgs.dosfstools pkgs.btrfs-progs]);
 
   boot.initrd.systemd.storePaths = [
     "${pkgs.ncurses}/share/terminfo/"

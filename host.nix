@@ -9,11 +9,10 @@
 
   system.stateVersion = lib.trivial.release;
 
-  # toplevel does not build without a root fs but is useful for debugging and it does not seem to hurt
+  # need for sysroot
   fileSystems."/" = {
     fsType = "tmpfs";
     options = [ "mode=0755" ];
-    neededForBoot = true;
   };
 
   boot.loader.grub.enable = false;
