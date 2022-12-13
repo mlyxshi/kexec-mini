@@ -40,8 +40,8 @@
   boot.initrd.systemd.enable = true;
   boot.initrd.systemd.emergencyAccess = true;
 
-  # real cloud provider: full virtualization, device name is sda
-  # qemu local test: Paravirtualization, device name is vda (-drive file=disk.img,format=qcow2,if=virtio)
+  # Real cloud provider(Oracle/Azure): full virtualization, device name is sda
+  # Qemu local test: Paravirtualization, device name is vda (-drive file=disk.img,format=qcow2,if=virtio)
   # This udev rule sysmlinks vda to sda so that the installer script can only use one device name.
   boot.initrd.services.udev.rules = ''
     KERNEL=="vda*", SYMLINK+="sda%n"
@@ -69,8 +69,6 @@
     unshare = "${pkgs.util-linux}/bin/unshare";
 
     ssh-keygen = "${config.programs.ssh.package}/bin/ssh-keygen";
-    setsid = "${pkgs.util-linux}/bin/setsid";
-
     awk = "${pkgs.gawk}/bin/awk";
     parted = "${pkgs.parted}/bin/parted";
     curl = "${pkgs.curl}/bin/curl";
