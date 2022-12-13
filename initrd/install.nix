@@ -42,7 +42,7 @@ let
     mount -t efivarfs efivarfs /sys/firmware/efi/efivars
 
     mkdir -p /mnt/var/lib/age/ 
-    [[ -n "$age_key" ]] && curl -sLo /mnt/persist/var/lib/age/sshkey $age_key
+    [[ -n "$age_key" ]] && curl -sLo /mnt/var/lib/age/sshkey $age_key
 
     mkdir -p /mnt/{etc,tmp} && touch /mnt/etc/NIXOS
     nix build  --store /mnt --profile /mnt/nix/var/nix/profiles/system  $flake_url.config.system.build.toplevel \
