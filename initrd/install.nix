@@ -24,7 +24,7 @@ let
 
     sleep 3 # need time for create symbolic link, if device is /dev/vda
 
-    mkfs.fat -F32 /dev/sda1
+    mkfs.fat -F 32 /dev/sda1
     mkfs.ext4 -F  /dev/sda2
 
     mkdir -p /mnt
