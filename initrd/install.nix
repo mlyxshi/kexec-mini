@@ -47,7 +47,7 @@ let
     --extra-substituters "http://cache.mlyxshi.com" -v
 
     [[ -n "$age_key" ]] && mkdir -p /mnt/persist/age/ && curl -sLo /mnt/persist/age/sshkey $age_key
-    mkdir -p /mnt/persist/etc/ssh && for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/persist/etc/ssh; done
+    mkdir -p /mnt/etc/ssh && for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/etc/ssh; done
 
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root /mnt -- /run/current-system/bin/switch-to-configuration boot
 
