@@ -33,6 +33,7 @@
 
     "profile".text = ''
       alias r='lf'
+      alias status='journalctl -u auto-install -f'
     '';
   };
 

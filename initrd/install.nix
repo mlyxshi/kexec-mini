@@ -41,20 +41,19 @@ let
     # support UEFI systemd-boot
     mount -t efivarfs efivarfs /sys/firmware/efi/efivars
 
-    [[ -n "$age_key" ]] && mkdir -p /mnt/var/lib/age/ && curl -sLo /mnt/var/lib/age/sshkey $age_key
-
     mkdir -p /mnt/{etc,tmp} && touch /mnt/etc/NIXOS
     nix build  --store /mnt --profile /mnt/nix/var/nix/profiles/system  $flake_url.config.system.build.toplevel \
     --extra-trusted-public-keys "cache.mlyxshi.com:qbWevQEhY/rV6wa21Jaivh+Lw2AArTFwCB2J6ll4xOI=" \
     --extra-substituters "http://cache.mlyxshi.com" -v
 
+    [[ -n "$age_key" ]] && mkdir -p /mnt/persist/var/lib/age/ && curl -sLo /mnt/persist/var/lib/age/sshkey $age_key
+    for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/persist/etc/ssh; done
+
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root /mnt -- /run/current-system/bin/switch-to-configuration boot
 
     [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d parse_mode=html -d text="<b>Install NixOS Completed</b>%0A$flake_url"
         
-    for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/etc/ssh; done
-    
-    # in local test, we force exit 1 and use emergency shell to debug
+    # In local test, we force exit 1 and use emergency shell to debug
     [[ -n "$local_test" ]] && exit 1 || reboot
   '';
 in
