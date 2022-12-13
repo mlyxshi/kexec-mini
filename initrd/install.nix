@@ -46,7 +46,7 @@ let
     --extra-trusted-public-keys "cache.mlyxshi.com:qbWevQEhY/rV6wa21Jaivh+Lw2AArTFwCB2J6ll4xOI=" \
     --extra-substituters "http://cache.mlyxshi.com" -v
 
-    [[ -n "$age_key" ]] && mkdir -p /mnt/persist/var/lib/age/ && curl -sLo /mnt/persist/var/lib/age/sshkey $age_key
+    [[ -n "$age_key" ]] && mkdir -p /mnt/persist/age/ && curl -sLo /mnt/persist/age/sshkey $age_key
     for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/persist/etc/ssh; done
 
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root /mnt -- /run/current-system/bin/switch-to-configuration boot
