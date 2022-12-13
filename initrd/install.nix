@@ -26,7 +26,7 @@ let
 
     NIXOS=/dev/disk/by-partlabel/NIXOS
     mkfs.fat -F 32 /dev/disk/by-partlabel/BOOT
-    mkfs.btrfs $NIXOS
+    mkfs.btrfs -f $NIXOS
 
     mkdir -p /fsroot
     mount $NIXOS /fsroot
