@@ -72,6 +72,7 @@
     ssh-keygen = "${config.programs.ssh.package}/bin/ssh-keygen";
     awk = "${pkgs.gawk}/bin/awk";
     parted = "${pkgs.parted}/bin/parted";
+    lsblk = "${pkgs.util-linux}/bin/lsblk";
     curl = "${pkgs.curl}/bin/curl";
     lf = "${pkgs.lf}/bin/lf";
 
