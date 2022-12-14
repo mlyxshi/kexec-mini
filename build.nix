@@ -67,7 +67,7 @@ in
     exec ${pkgs.qemu_kvm}/bin/qemu-kvm -name ${config.networking.hostName} \
       -m 2048 \
       -kernel ${config.system.build.kernel}/${kernelTarget}  -initrd ${config.system.build.initialRamdisk}/initrd.zst  \
-      -append "console=ttyS0 init=/bin/init ${toString config.boot.kernelParams} \
+      -append "console=ttyS0 init=/bin/init ${toString config.boot.kernelParams}" \
       -no-reboot -nographic \
       -net nic,model=virtio \
       -net user,net=10.0.2.0/24,host=10.0.2.2,dns=10.0.2.3,hostfwd=tcp::2222-:22 \
