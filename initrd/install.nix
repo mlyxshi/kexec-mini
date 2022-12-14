@@ -2,12 +2,13 @@
 { pkgs, lib, config, ... }:
 let
   installScript = ''
-    flake_url=$(get-kernel-param flake_url)
-    if [ -n "$flake_url" ]
+    host=$(get-kernel-param host)
+    if [ -n "$host" ]
     then
-      echo $flake_url
+      closure=$(curl -sL https://github.com/mlyxshi/install/releases/download/latest/$host)
+      echo $closure
     else
-      echo "No flake_url defined for auto-installer"
+      echo "No host defined for auto-installer"
       exit 1
     fi
 
@@ -38,22 +39,23 @@ let
     mount -o subvol=nix,compress-force=zstd    $NIXOS /mnt/nix
     mount -o subvol=persist,compress-force=zstd $NIXOS /mnt/persist
     
+    nix-env --store /mnt -p /mnt/nix/var/nix/profiles/system --set $closure \
+    --extra-trusted-public-keys "cache.mlyxshi.com:qbWevQEhY/rV6wa21Jaivh+Lw2AArTFwCB2J6ll4xOI=" \
+    --extra-substituters "http://cache.mlyxshi.com" 
+
+    mkdir -p /mnt/{etc,tmp}
+    touch /mnt/etc/NIXOS
+    [[ -n "$age_key" ]] && mkdir -p /mnt/persist/age/ && curl -sLo /mnt/persist/age/sshkey $age_key
+    mkdir -p /mnt/persist/etc/ssh && for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/persist/etc/ssh; done
+    
     # support UEFI systemd-boot
     mount -t efivarfs efivarfs /sys/firmware/efi/efivars
 
-    mkdir -p /mnt/{etc,tmp} && touch /mnt/etc/NIXOS
-    nix build  --store /mnt --profile /mnt/nix/var/nix/profiles/system  $flake_url.config.system.build.toplevel \
-    --extra-trusted-public-keys "cache.mlyxshi.com:qbWevQEhY/rV6wa21Jaivh+Lw2AArTFwCB2J6ll4xOI=" \
-    --extra-substituters "http://cache.mlyxshi.com" -v
-
-    [[ -n "$age_key" ]] && mkdir -p /mnt/persist/age/ && curl -sLo /mnt/persist/age/sshkey $age_key
-    mkdir -p /mnt/persist/etc/ssh && for i in /etc/ssh/ssh_host_ed25519_key*; do cp $i /mnt/persist/etc/ssh; done
-
     NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root /mnt -- /run/current-system/bin/switch-to-configuration boot
 
-    [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d parse_mode=html -d text="<b>Install NixOS Completed</b>%0A$flake_url"
+    [[ -n "$tg_id" && -n "$tg_token" ]] && curl -s -X POST https://api.telegram.org/bot$tg_token/sendMessage -d chat_id=$tg_id -d parse_mode=html -d text="<b>Install NixOS Completed</b>%0A$host"
         
-    # In local test, we force exit 1 and use emergency shell to debug
+    # In local test, force exit 1 and use emergency shell to debug
     [[ -n "$local_test" ]] && exit 1 || reboot
   '';
 in
