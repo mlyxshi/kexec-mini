@@ -25,7 +25,7 @@ let
     
     for i in /home/$SUDO_USER/.ssh/authorized_keys /root/.ssh/authorized_keys /etc/ssh/authorized_keys.d/root; do
       if [[ -e $i && -s $i ]]; then 
-        echo "Get authorized_keys from: $i"
+        echo "Get authorized_keys      from: $i"
         ssh_authorized_key=$(cat $i | base64 -w0)
         break
       fi     
