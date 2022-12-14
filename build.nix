@@ -32,7 +32,7 @@ let
     done
 
     ./${kexec-musl-bin} --kexec-syscall-auto --load ./${kernelName} --initrd=./${initrdName}  --append "init=/bin/init ${toString config.boot.kernelParams} ssh_host_key=$ssh_host_key ssh_authorized_key=$ssh_authorized_key $*"
-    systemctl kexec 
+    ./${kexec-musl-bin} -e
   '';
 in
 {
