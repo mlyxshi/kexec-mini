@@ -26,7 +26,8 @@ let
     sleep 2
 
     NIXOS=/dev/disk/by-partlabel/NIXOS
-    mkfs.fat -F 32 /dev/disk/by-partlabel/BOOT
+    BOOT=/dev/disk/by-partlabel/BOOT
+    mkfs.fat -F 32 $BOOT
     mkfs.btrfs -f $NIXOS
 
     mkdir -p /fsroot
@@ -35,7 +36,7 @@ let
     btrfs subvol create /fsroot/persist
 
     mkdir -p /mnt/{boot,nix,persist}
-    mount /dev/disk/by-partlabel/BOOT /mnt/boot
+    mount $BOOT /mnt/boot
     mount -o subvol=nix,compress-force=zstd    $NIXOS /mnt/nix
     mount -o subvol=persist,compress-force=zstd $NIXOS /mnt/persist
     
