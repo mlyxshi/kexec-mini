@@ -20,11 +20,6 @@
           system = "aarch64-linux";
           modules = commonModules;
         };
-
-        "demo" = nixpkgs.lib.nixosSystem {
-          system = "x86_64-linux";
-          modules = [ ./demo.nix ];
-        };
       };
 
       packages.x86_64-linux.default = self.nixosConfigurations."kexec-x86_64".config.system.build.test;
