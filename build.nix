@@ -6,6 +6,7 @@ let
   kernelName = "${kernelTarget}-${arch}";
   initrdName = "initrd-${arch}.zst";
   kexecScriptName = "kexec-${arch}";
+  ipxeScriptName = "ipxe-${arch}";
   kexec-musl-bin = "kexec-musl-${arch}";
 
   kexecScript = pkgs.writeScript "kexec-boot" ''
@@ -34,6 +35,13 @@ let
     ./${kexec-musl-bin} --kexec-syscall-auto --load ./${kernelName} --initrd=./${initrdName}  --append "init=/bin/init ${toString config.boot.kernelParams} ssh_host_key=$ssh_host_key ssh_authorized_key=$ssh_authorized_key $*"
     ./${kexec-musl-bin} -e
   '';
+
+  ipxeScript = pkgs.writeScript "ipxe-script" ''
+    #!ipxe
+    kernel https://github.com/mlyxshi/kexec-mini/releases/download/latest/${kernelName} initrd=${initrdName} init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
+    initrd https://github.com/mlyxshi/kexec-mini/releases/download/latest/${initrdName}
+    boot
+  '';
 in
 {
   system.build.kexec = pkgs.runCommand "buildkexec" { } ''
@@ -41,6 +49,7 @@ in
     ln -s ${config.system.build.kernel}/${kernelTarget}         $out/${kernelName}
     ln -s ${config.system.build.initialRamdisk}/initrd.zst      $out/${initrdName}
     ln -s ${kexecScript}                                        $out/${kexecScriptName}
+    ln -s ${ipxeScript}                                         $out/${ipxeScriptName}
     ln -s ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/${kexec-musl-bin}
   '';
 
