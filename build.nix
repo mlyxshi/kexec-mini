@@ -36,7 +36,7 @@ let
     ./${kexec-musl-bin} -e
   '';
 
-  ipxeScript = pkgs.writeScript "ipxe-script" ''
+  ipxeScript = pkgs.writeText "ipxe-script" ''
     #!ipxe
     kernel https://github.com/mlyxshi/kexec-mini/releases/download/latest/${kernelName} initrd=${initrdName} init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
     initrd https://github.com/mlyxshi/kexec-mini/releases/download/latest/${initrdName}
