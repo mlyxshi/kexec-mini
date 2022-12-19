@@ -32,6 +32,10 @@ tftp 138.2.16.45 netboot.xyz.efi netboot.xyz.efi
 tftp 138.2.16.45 netboot.xyz-arm64.efi netboot.xyz-arm64.efi
 ```
 ```
+# Format: cat YOUR_KEY | base64 -w0
+set cmdline ssh_authorized_key=c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1wYVkzTHlDVzRISHFicDRTQTR0bkErMUJrZ3dydHJvMnMvREVzQmNQRGUKCg==
+``` 
+```
 chain https://github.com/mlyxshi/kexec-mini/releases/download/latest/ipxe-x86_64 
 ```
 ```
