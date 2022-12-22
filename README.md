@@ -28,8 +28,8 @@ curl -sL https://github.com/mlyxshi/kexec-mini/releases/download/latest/kexec-$(
 # UEFI Shell
 FS0:
 ifconfig -s eth0 dhcp
-tftp 138.2.16.45 netboot.xyz.efi netboot.xyz.efi
-tftp 138.2.16.45 netboot.xyz-arm64.efi netboot.xyz-arm64.efi
+tftp 138.2.16.45 netboot.xyz.efi
+tftp 138.2.16.45 netboot.xyz-arm64.efi
 exit
 ```
 ```
