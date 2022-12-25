@@ -24,21 +24,21 @@ let
     ./kexec-bin -e
   '';
 
-  kexecScript-x86_64 = pkgs.writeTextDir "script/kexec" ''
+  kexecScript-x86_64 = pkgs.writeTextDir "script/kexec" (''
     #!/usr/bin/env bash
     set -e   
     echo "Downloading kexec-musl-bin" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/kexec-bin && chmod +x ./kexec-bin
     echo "Downloading initrd" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/initrd
     echo "Downloading kernel" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/kernel
-  '' + kexecScript-common;
+  '' + kexecScript-common);
 
-  kexecScript-aarch64 = pkgs.writeTextDir "script/kexec" ''
+  kexecScript-aarch64 = pkgs.writeTextDir "script/kexec" (''
     #!/usr/bin/env bash
     set -e   
     echo "Downloading kexec-musl-bin" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/kexec-bin && chmod +x ./kexec-bin
     echo "Downloading initrd" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/initrd
     echo "Downloading kernel" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/kernel
-  '' + kexecScript-common;
+  '' + kexecScript-common);
 
   ipxeScript-x86_64 = pkgs.writeTextDir "script/ipxe" ''
     #!ipxe
