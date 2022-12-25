@@ -56,7 +56,7 @@ in
   system.build.hydra = pkgs.symlinkJoin {
     name = "kexec";
     paths = [
-      "${config.system.build.kernel}"
+      config.system.build.kernel
       "${config.system.build.initialRamdisk}"
       "${kexecScript}"
       "${ipxeScript}"
