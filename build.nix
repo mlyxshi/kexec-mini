@@ -55,13 +55,19 @@ in
 
   system.build.hydra = pkgs.runCommand "buildkexec" { } ''
     mkdir -p $out/nix-support
-    echo "Hello" > $out/text.txt
-    echo "file test $out/text.txt" > $out/nix-support/hydra-build-products
-    echo "file ${kernelName} ${config.system.build.kernel}/${kernelTarget}" >> $out/nix-support/hydra-build-products
-    echo "file ${initrdName} ${config.system.build.initialRamdisk}/initrd.zst" >> $out/nix-support/hydra-build-products
-    echo "file ${kexecScriptName} ${kexecScript}" >> $out/nix-support/hydra-build-products
-    echo "file ${ipxeScriptName} ${ipxeScript}" >> $out/nix-support/hydra-build-products
-    echo "file ${kexec-musl-bin} ${pkgs.pkgsStatic.kexec-tools}/bin/kexec" >> $out/nix-support/hydra-build-products
+
+    ln -s ${config.system.build.kernel}/${kernelTarget}         $out/${kernelName}
+    ln -s ${config.system.build.initialRamdisk}/initrd.zst      $out/${initrdName}
+    ln -s ${kexecScript}                                        $out/${kexecScriptName}
+    ln -s ${ipxeScript}                                         $out/${ipxeScriptName}
+    ln -s ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/${kexec-musl-bin}
+    
+
+    echo "file ${kernelName} $out/${kernelName}" >> $out/nix-support/hydra-build-products
+    echo "file ${initrdName} $out/${initrdName}" >> $out/nix-support/hydra-build-products
+    echo "file ${kexecScriptName} $out/${kexecScriptName}" >> $out/nix-support/hydra-build-products
+    echo "file ${ipxeScriptName} $out/${ipxeScriptName}" >> $out/nix-support/hydra-build-products
+    echo "file ${kexec-musl-bin}  $out/${kexec-musl-bin}" >> $out/nix-support/hydra-build-products
   '';
 
 
