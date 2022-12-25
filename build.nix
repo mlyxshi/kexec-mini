@@ -53,23 +53,19 @@ in
     ln -s ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/${kexec-musl-bin}
   '';
 
-  system.build.hydra = pkgs.runCommand "buildkexec" { } ''
-    mkdir -p $out/nix-support
-
-    cp ${config.system.build.kernel}/${kernelTarget}         $out/${kernelName}
-    cp ${config.system.build.initialRamdisk}/initrd.zst      $out/${initrdName}
-    cp ${kexecScript}                                        $out/${kexecScriptName}
-    cp ${ipxeScript}                                         $out/${ipxeScriptName}
-    cp ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/${kexec-musl-bin}
-    
-    cat > $out/nix-support/hydra-build-products <<EOF
-    file kernel $out/${kernelName} 
-    file initrd $out/${initrdName} 
-    file kexec $out/${kexecScriptName}
-    file ipex $out/${ipxeScriptName}
-    file kexec-bin $out/${kexec-musl-bin} 
-    EOF
-  '';
+  system.build.hydra = pkgs.symlinkJoin {
+    name = "kexec";
+    paths = [
+      "${config.system.build.kernel}/${kernelTarget}"
+      "${config.system.build.initialRamdisk}/initrd.zst"
+      "${kexecScript}"
+      "${ipxeScript}"
+      "${pkgs.pkgsStatic.kexec-tools}/bin/kexec"
+    ];
+    postBuild = ''
+      mkdir -p $out/nix-support
+    '';
+  };
 
 
   system.build.test = pkgs.writeShellScriptBin "test-vm" ''
