@@ -65,8 +65,8 @@ in
     postBuild = ''
       mkdir -p $out/nix-support
       cat > $out/nix-support/hydra-build-products <<EOF
-      file kernel $out/${kernelTarget}
       file initrd $out/initrd 
+      file kernel $out/${kernelTarget}
       file kexec $out/bin/kexec-boot
       file ipex $out/bin/ipxe-script
       file kexec-bin $out/bin/kexec
