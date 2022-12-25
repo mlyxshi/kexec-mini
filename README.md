@@ -19,8 +19,13 @@ initrd.target(default)
 ```
 # Usage
 ### From running linux distro
+### x86-64
 ```
-curl -sL https://github.com/mlyxshi/kexec-mini/releases/download/latest/kexec-$(uname -m) | bash -s
+curl -sL https://github.com/mlyxshi/kexec-mini/releases/download/latest/kexec | bash -s
+```
+### aarch64
+```
+curl -sL https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/kexec | bash -s
 ```
 ### From netboot.xyz ipxe(Rescue)
 
@@ -37,10 +42,10 @@ exit
 set cmdline ssh_authorized_key=c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1wYVkzTHlDVzRISHFicDRTQTR0bkErMUJrZ3dydHJvMnMvREVzQmNQRGUKCg==
 ``` 
 ```
-chain https://github.com/mlyxshi/kexec-mini/releases/download/latest/ipxe-x86_64 
+chain https://github.com/mlyxshi/kexec-mini/releases/download/latest/ipxe
 ```
 ```
-chain https://github.com/mlyxshi/kexec-mini/releases/download/latest/ipxe-aarch64 
+chain https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/ipxe
 ```
 # Test
 ```

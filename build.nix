@@ -77,7 +77,7 @@ in
     ln -s ${config.system.build.kernel}/${kernelTarget}         $out/kernel
     ln -s ${config.system.build.initialRamdisk}/initrd.zst      $out/initrd
     ln -s ${kexecScript-x86_64}/script/kexec                    $out/kexec
-    ln -s ${ipxeScript-x86_64}/script/kexec                     $out/ipxe
+    ln -s ${ipxeScript-x86_64}/script/ipxe                      $out/ipxe
     ln -s ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/kexec-bin
   '';
 
