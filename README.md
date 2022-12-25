@@ -17,6 +17,8 @@ auto-install.service
 initrd.target(default)
 
 ```
+x86-64  artifact: [Github Action](https://github.com/mlyxshi/kexec-mini/actions/workflows/main.yml) 
+aarch64 artifact: [Hydra](https://hydra.mlyxshi.com/jobset/kexec/build) 
 # Usage
 ### From running linux distro
 ### x86-64
