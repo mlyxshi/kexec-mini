@@ -15,16 +15,10 @@ jobs:
           experimental-features = nix-command flakes
           trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
           substituters = https://cache.nixos.org
-
-    - run: |
-        mkdir -m 0755  ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
     
     - run: |
         KEXEC_X86_64=$(nix build --no-link --print-out-paths .#nixosConfigurations.kexec-x86_64.config.system.build.x86_64)
         cp -Lr --no-preserve=all $KEXEC_X86_64 artifact1   
-
 
     - uses: marvinpinto/action-automatic-releases@latest
       with:

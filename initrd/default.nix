@@ -41,7 +41,7 @@
   boot.initrd.systemd.enable = true;
   boot.initrd.systemd.emergencyAccess = true;
 
-  # Real cloud provider(Oracle/Azure): full virtualization, device name is sda
+  # Real cloud provider(Oracle/Azure): device name is sda
   # Qemu local test: Paravirtualization, device name is vda (-drive file=disk.img,format=qcow2,if=virtio)
   # This udev rule sysmlinks vda to sda so that the installer script can only use one device name.
   boot.initrd.services.udev.rules = ''
@@ -53,7 +53,7 @@
     let
       systemd = config.boot.initrd.systemd.package;
     in
-    lib.mkForce ([ pkgs.bashInteractive pkgs.coreutils systemd.kmod systemd ] ++ [ pkgs.dosfstools pkgs.btrfs-progs]);
+    lib.mkForce ([ pkgs.bashInteractive pkgs.coreutils systemd.kmod systemd ] ++ [ pkgs.dosfstools pkgs.btrfs-progs ]);
 
   boot.initrd.systemd.storePaths = [
     "${pkgs.ncurses}/share/terminfo/"
@@ -88,7 +88,7 @@
   };
 
 
-  
+
   # move everything in / to /sysroot and switch-root into it. 
   # This runs a few things twice and wastes some memory
   # but is necessary for nix --store flag as pivot_root does not work on rootfs.
