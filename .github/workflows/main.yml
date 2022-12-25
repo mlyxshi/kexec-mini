@@ -25,11 +25,8 @@ jobs:
         KEXEC_X86_64=$(nix build --no-link --print-out-paths .#nixosConfigurations.kexec-x86_64.config.system.build.kexec)
         cp -Lr --no-preserve=all $KEXEC_X86_64 artifact1   
     
-    # Details: github:mlyxshi/flake/host/oracle/us1.nix
-    # Build aarch64 on Oracle ARM
     - run: |
-        KEXEC_AARCH64=$(ssh -o StrictHostKeyChecking=no root@us1.mlyxshi.com buildkexec-mini)
-        rsync -L -e "ssh -o StrictHostKeyChecking=no" root@us1.mlyxshi.com:$KEXEC_AARCH64/*  artifact2/
+
 
 
     - uses: marvinpinto/action-automatic-releases@latest
@@ -39,5 +36,4 @@ jobs:
         prerelease: true
         files: |
           artifact1/*
-          artifact2/
 
