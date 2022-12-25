@@ -9,7 +9,7 @@ let
   ipxeScriptName = "ipxe-${arch}";
   kexec-musl-bin = "kexec-musl-${arch}";
 
-  kexecScript = pkgs.writeShellScriptBin "kexec-boot" ''
+  kexecScript = pkgs.writeTextDir "script/kexec" ''
     #!/usr/bin/env bash
     set -e   
     echo "Downloading kexec-musl-bin" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/${kexec-musl-bin} && chmod +x ./${kexec-musl-bin}
@@ -36,7 +36,7 @@ let
     ./${kexec-musl-bin} -e
   '';
 
-  ipxeScript = pkgs.writeShellScriptBin "ipxe-script" ''
+  ipxeScript = pkgs.writeTextDir "script/ipxe" ''
     #!ipxe
     kernel https://github.com/mlyxshi/kexec-mini/releases/download/latest/${kernelName} initrd=${initrdName} init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
     initrd https://github.com/mlyxshi/kexec-mini/releases/download/latest/${initrdName}
@@ -67,8 +67,8 @@ in
       cat > $out/nix-support/hydra-build-products <<EOF
       file initrd $out/initrd
       file kernel $out/${kernelTarget}
-      file kexec $out/bin/kexec-boot
-      file ipex $out/bin/ipxe-script
+      file kexec $out/script/kexec
+      file ipex $out/script/ipxe
       file kexec-bin $out/bin/kexec
       EOF
     '';
