@@ -56,11 +56,11 @@ in
   system.build.hydra = pkgs.symlinkJoin {
     name = "kexec";
     paths = [
-      "${config.system.build.kernel}/${kernelTarget}"
-      "${config.system.build.initialRamdisk}/initrd.zst"
+      "${config.system.build.kernel}"
+      "${config.system.build.initialRamdisk}"
       "${kexecScript}"
       "${ipxeScript}"
-      "${pkgs.pkgsStatic.kexec-tools}/bin/kexec"
+      "${pkgs.pkgsStatic.kexec-tools}"
     ];
     postBuild = ''
       mkdir -p $out/nix-support
