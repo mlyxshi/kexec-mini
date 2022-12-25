@@ -55,6 +55,8 @@ in
 
   system.build.hydra = pkgs.runCommand "buildkexec" { } ''
     mkdir -p $out/nix-support
+    echo "Hello" > $out/text.txt
+    echo "file test $out/text.txt" > $out/nix-support/hydra-build-products
     echo "file ${kernelName} ${config.system.build.kernel}/${kernelTarget}" >> $out/nix-support/hydra-build-products
     echo "file ${initrdName} ${config.system.build.initialRamdisk}/initrd.zst" >> $out/nix-support/hydra-build-products
     echo "file ${kexecScriptName} ${kexecScript}" >> $out/nix-support/hydra-build-products
