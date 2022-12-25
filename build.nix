@@ -66,7 +66,7 @@ in
       mkdir -p $out/nix-support
       cat > $out/nix-support/hydra-build-products <<EOF
       file kernel $out/${kernelTarget}
-      file initrd $out/initrd.zst 
+      file initrd $out/initrd 
       file kexec $out/bin/kexec-boot
       file ipex $out/bin/ipxe-script
       file kexec-bin $out/bin/kexec
