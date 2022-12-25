@@ -6,7 +6,7 @@ let
   kexecScript-x86_64 = pkgs.writeTextDir "script/kexec" ''
     #!/usr/bin/env bash
     set -e   
-    echo "Downloading kexec-musl-bin" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/kexec-bin} && chmod +x ./kexec-bin
+    echo "Downloading kexec-musl-bin" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/kexec-bin && chmod +x ./kexec-bin
     echo "Downloading initrd" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/initrd
     echo "Downloading kernel" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/kernel
 
