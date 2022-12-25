@@ -56,11 +56,11 @@ in
   system.build.hydra = pkgs.runCommand "buildkexec" { } ''
     mkdir -p $out/nix-support
 
-    ln -s ${config.system.build.kernel}/${kernelTarget}         $out/${kernelName}
-    ln -s ${config.system.build.initialRamdisk}/initrd.zst      $out/${initrdName}
-    ln -s ${kexecScript}                                        $out/${kexecScriptName}
-    ln -s ${ipxeScript}                                         $out/${ipxeScriptName}
-    ln -s ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/${kexec-musl-bin}
+    cp ${config.system.build.kernel}/${kernelTarget}         $out/${kernelName}
+    cp ${config.system.build.initialRamdisk}/initrd.zst      $out/${initrdName}
+    cp ${kexecScript}                                        $out/${kexecScriptName}
+    cp ${ipxeScript}                                         $out/${ipxeScriptName}
+    cp ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/${kexec-musl-bin}
     
     cat > $out/nix-support/hydra-build-products <<EOF
     file ${kernelName} $out/${kernelName} 
