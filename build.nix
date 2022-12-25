@@ -63,11 +63,11 @@ in
     cp ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/${kexec-musl-bin}
     
     cat > $out/nix-support/hydra-build-products <<EOF
-    $out/${kernelName} 
-    $out/${initrdName} 
-    $out/${kexecScriptName}
-    $out/${ipxeScriptName}
-    $out/${kexec-musl-bin} 
+    file kernel $out/${kernelName} 
+    file initrd $out/${initrdName} 
+    file kexec $out/${kexecScriptName}
+    file ipex $out/${ipxeScriptName}
+    file kexec-bin $out/${kexec-musl-bin} 
     EOF
   '';
 
