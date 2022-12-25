@@ -2,19 +2,13 @@
 { pkgs, lib, config, ... }:
 let
   kernelTarget = pkgs.hostPlatform.linux-kernel.target;
-  arch = pkgs.hostPlatform.uname.processor;
-  kernelName = "${kernelTarget}-${arch}";
-  initrdName = "initrd-${arch}.zst";
-  kexecScriptName = "kexec-${arch}";
-  ipxeScriptName = "ipxe-${arch}";
-  kexec-musl-bin = "kexec-musl-${arch}";
 
-  kexecScript = pkgs.writeTextDir "script/kexec" ''
+  kexecScript-x86_64 = pkgs.writeTextDir "script/kexec" ''
     #!/usr/bin/env bash
     set -e   
-    echo "Downloading kexec-musl-bin" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/${kexec-musl-bin} && chmod +x ./${kexec-musl-bin}
-    echo "Downloading initrd" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/${initrdName}
-    echo "Downloading kernel" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/${kernelName}
+    echo "Downloading kexec-musl-bin" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/kexec-bin} && chmod +x ./kexec-bin
+    echo "Downloading initrd" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/initrd
+    echo "Downloading kernel" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/kernel
 
     for i in /etc/ssh/ssh_host_ed25519_key /persist/etc/ssh/ssh_host_ed25519_key; do
       if [[ -e $i && -s $i ]]; then 
@@ -32,34 +26,68 @@ let
       fi     
     done
 
-    ./${kexec-musl-bin} --kexec-syscall-auto --load ./${kernelName} --initrd=./${initrdName}  --append "init=/bin/init ${toString config.boot.kernelParams} ssh_host_key=$ssh_host_key ssh_authorized_key=$ssh_authorized_key $*"
-    ./${kexec-musl-bin} -e
+    ./kexec-bin --kexec-syscall-auto --load ./kernel --initrd=./initrd  --append "init=/bin/init ${toString config.boot.kernelParams} ssh_host_key=$ssh_host_key ssh_authorized_key=$ssh_authorized_key $*"
+    ./kexec-bin -e
   '';
 
-  ipxeScript = pkgs.writeTextDir "script/ipxe" ''
+  kexecScript-aarch64 = pkgs.writeTextDir "script/kexec" ''
+    #!/usr/bin/env bash
+    set -e   
+    echo "Downloading kexec-musl-bin" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/kexec-bin && chmod +x ./kexec-bin
+    echo "Downloading initrd" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/initrd
+    echo "Downloading kernel" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/kernel
+
+    for i in /etc/ssh/ssh_host_ed25519_key /persist/etc/ssh/ssh_host_ed25519_key; do
+      if [[ -e $i && -s $i ]]; then 
+        echo "Get ssh_host_ed25519_key from: $i"
+        ssh_host_key=$(cat $i | base64 -w0)
+        break
+      fi     
+    done
+    
+    for i in /home/$SUDO_USER/.ssh/authorized_keys /root/.ssh/authorized_keys /etc/ssh/authorized_keys.d/root; do
+      if [[ -e $i && -s $i ]]; then 
+        echo "Get authorized_keys      from: $i"
+        ssh_authorized_key=$(cat $i | base64 -w0)
+        break
+      fi     
+    done
+
+    ./kexec-bin --kexec-syscall-auto --load ./kernel --initrd=./initrd  --append "init=/bin/init ${toString config.boot.kernelParams} ssh_host_key=$ssh_host_key ssh_authorized_key=$ssh_authorized_key $*"
+    ./kexec-bin -e
+  '';
+
+  ipxeScript-x86_64 = pkgs.writeTextDir "script/ipxe" ''
     #!ipxe
-    kernel https://github.com/mlyxshi/kexec-mini/releases/download/latest/${kernelName} initrd=${initrdName} init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
-    initrd https://github.com/mlyxshi/kexec-mini/releases/download/latest/${initrdName}
+    kernel https://github.com/mlyxshi/kexec-mini/releases/download/latest/kernel initrd=initrd init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
+    initrd https://github.com/mlyxshi/kexec-mini/releases/download/latest/initrd
+    boot
+  '';
+
+  ipxeScript-aarch64 = pkgs.writeTextDir "script/ipxe" ''
+    #!ipxe
+    kernel https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/kernel initrd=initrd init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
+    initrd https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/initrd
     boot
   '';
 in
 {
-  system.build.kexec = pkgs.runCommand "buildkexec" { } ''
+  system.build.x86_64 = pkgs.runCommand "kexec" { } ''
     mkdir -p $out
-    ln -s ${config.system.build.kernel}/${kernelTarget}         $out/${kernelName}
-    ln -s ${config.system.build.initialRamdisk}/initrd.zst      $out/${initrdName}
-    ln -s ${kexecScript}                                        $out/${kexecScriptName}
-    ln -s ${ipxeScript}                                         $out/${ipxeScriptName}
-    ln -s ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/${kexec-musl-bin}
+    ln -s ${config.system.build.kernel}/${kernelTarget}         $out/kernel
+    ln -s ${config.system.build.initialRamdisk}/initrd.zst      $out/initrd
+    ln -s ${kexecScript-x86_64}/script/kexec                    $out/kexec
+    ln -s ${ipxeScript-x86_64}/script/kexec                     $out/ipxe
+    ln -s ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/kexec-bin
   '';
 
-  system.build.hydra = pkgs.symlinkJoin {
+  system.build.aarch64 = pkgs.symlinkJoin {
     name = "kexec";
     paths = [
       config.system.build.kernel
       config.system.build.initialRamdisk
-      kexecScript
-      ipxeScript
+      kexecScript-aarch64
+      ipxeScript-aarch64
       pkgs.pkgsStatic.kexec-tools
     ];
     postBuild = ''

@@ -25,7 +25,7 @@
       packages.x86_64-linux.default = self.nixosConfigurations."kexec-x86_64".config.system.build.test;
       packages.x86_64-linux.test0 = self.nixosConfigurations."kexec-x86_64".config.system.build.test0;
 
-      hydraJobs."aarch64" = self.nixosConfigurations."kexec-aarch64".config.system.build.hydra;
+      hydraJobs.kexec-aarch64 = self.nixosConfigurations."kexec-aarch64".config.system.build.aarch64;
     };
 
 }
