@@ -42,7 +42,7 @@ let
     
     nix-env --store /mnt -p /mnt/nix/var/nix/profiles/system --set $closure \
     --extra-trusted-public-keys "cache.mlyxshi.com:qbWevQEhY/rV6wa21Jaivh+Lw2AArTFwCB2J6ll4xOI=" \
-    --extra-substituters "http://cache.mlyxshi.com" 
+    --extra-substituters "https://cache.mlyxshi.com" 
 
     mkdir -p /mnt/{etc,tmp}
     touch /mnt/etc/NIXOS
