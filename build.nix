@@ -57,10 +57,10 @@ in
     name = "kexec";
     paths = [
       config.system.build.kernel
-      "${config.system.build.initialRamdisk}"
-      "${kexecScript}"
-      "${ipxeScript}"
-      "${pkgs.pkgsStatic.kexec-tools}"
+      config.system.build.initialRamdisk
+      kexecScript
+      ipxeScript
+      pkgs.pkgsStatic.kexec-tools
     ];
     postBuild = ''
       mkdir -p $out/nix-support
