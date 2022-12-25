@@ -53,6 +53,15 @@ in
     ln -s ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/${kexec-musl-bin}
   '';
 
+  system.build.hydra = pkgs.runCommand "buildkexec" { } ''
+    mkdir -p $out/nix-support
+    echo "file ${kernelName} ${config.system.build.kernel}/${kernelTarget}" >> $out/nix-support/hydra-build-products
+    echo "file ${initrdName} ${config.system.build.initialRamdisk}/initrd.zst" >> $out/nix-support/hydra-build-products
+    echo "file ${kexecScriptName} ${kexecScript}" >> $out/nix-support/hydra-build-products
+    echo "file ${ipxeScriptName} ${ipxeScript}" >> $out/nix-support/hydra-build-products
+    echo "file ${kexec-musl-bin} ${pkgs.pkgsStatic.kexec-tools}/bin/kexec" >> $out/nix-support/hydra-build-products
+  '';
+
 
   system.build.test = pkgs.writeShellScriptBin "test-vm" ''
     test -f disk.img || ${pkgs.qemu_kvm}/bin/qemu-img create -f qcow2 disk.img 10G
