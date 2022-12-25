@@ -62,12 +62,13 @@ in
     ln -s ${ipxeScript}                                         $out/${ipxeScriptName}
     ln -s ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/${kexec-musl-bin}
     
-
-    echo "file ${kernelName} $out/${kernelName}" >> $out/nix-support/hydra-build-products
-    echo "file ${initrdName} $out/${initrdName}" >> $out/nix-support/hydra-build-products
-    echo "file ${kexecScriptName} $out/${kexecScriptName}" >> $out/nix-support/hydra-build-products
-    echo "file ${ipxeScriptName} $out/${ipxeScriptName}" >> $out/nix-support/hydra-build-products
-    echo "file ${kexec-musl-bin}  $out/${kexec-musl-bin}" >> $out/nix-support/hydra-build-products
+    cat > $out/nix-support/hydra-build-products <<EOF
+    file ${kernelName} $out/${kernelName} 
+    file ${initrdName} $out/${initrdName} 
+    file ${kexecScriptName} $out/${kexecScriptName}
+    file ${ipxeScriptName} $out/${ipxeScriptName}
+    file ${kexec-musl-bin}  $out/${kexec-musl-bin} 
+    EOF
   '';
 
 
