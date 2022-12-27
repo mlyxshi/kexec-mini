@@ -35,7 +35,7 @@ let
   ipxeScript = pkgs.writeTextDir "script/ipxe" ''
     #!ipxe
     kernel http://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kernel initrd=initrd init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
-    initrd http://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kernel
+    initrd http://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/initrd
     boot
   '';
 in
