@@ -27,14 +27,15 @@ let
       fi     
     done
     
+    echo "Wait ssh connection lost..., ssh root@ip and enjoy NixOS"
     ./kexec-bin --kexec-syscall-auto --load ./kernel --initrd=./initrd  --append "init=/bin/init ${toString config.boot.kernelParams} ssh_host_key=$ssh_host_key ssh_authorized_key=$ssh_authorized_key $*"
     ./kexec-bin -e
   '';
 
   ipxeScript = pkgs.writeTextDir "script/ipxe" ''
     #!ipxe
-    kernel https://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kernel initrd=initrd init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
-    initrd https://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kernel
+    kernel http://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kernel initrd=initrd init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
+    initrd http://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kernel
     boot
   '';
 in
