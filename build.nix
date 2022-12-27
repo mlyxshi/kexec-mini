@@ -27,7 +27,7 @@ let
   kexecScript-x86_64 = pkgs.writeTextDir "script/kexec" (''
     #!/usr/bin/env bash
     set -e   
-
+    test
     echo "Downloading kexec-musl-bin" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/x86_64/latest/download-by-type/file/kexec-bin && chmod +x ./kexec-bin
     echo "Downloading initrd" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/x86_64/latest/download-by-type/file/initrd
     echo "Downloading kernel" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/x86_64/latest/download-by-type/file/kernel
@@ -36,7 +36,7 @@ let
   kexecScript-aarch64 = pkgs.writeTextDir "script/kexec" (''
     #!/usr/bin/env bash    
     set -e  
-    
+    test
     echo "Downloading kexec-musl-bin" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/kexec-bin && chmod +x ./kexec-bin
     echo "Downloading initrd" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/initrd
     echo "Downloading kernel" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/kernel
