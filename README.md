@@ -17,18 +17,12 @@ auto-install.service
 initrd.target(default)
 
 ```
-x86-64  artifact: [Github Action](https://github.com/mlyxshi/kexec-mini/actions/workflows/main.yml) 
 
-aarch64 artifact: [Hydra](https://hydra.mlyxshi.com/jobset/kexec/build) 
+[Hydra](https://hydra.mlyxshi.com/jobset/kexec/build) 
 # Usage
 ### From running linux distro
-### x86-64
 ```
-curl -sL https://github.com/mlyxshi/kexec-mini/releases/download/latest/kexec | bash -s
-```
-### aarch64
-```
-curl -sL https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/kexec | bash -s
+curl -sL https://hydra.mlyxshi.com/job/kexec/build/$(uname -m)/latest/download-by-type/file/kexec | bash -s
 ```
 ### From netboot.xyz ipxe(Rescue)
 
@@ -45,7 +39,7 @@ exit
 set cmdline ssh_authorized_key=c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1wYVkzTHlDVzRISHFicDRTQTR0bkErMUJrZ3dydHJvMnMvREVzQmNQRGUKCg==
 ``` 
 ```
-chain https://github.com/mlyxshi/kexec-mini/releases/download/latest/ipxe
+chain https://hydra.mlyxshi.com/job/kexec/build/x86-64/latest/download-by-type/file/ipxe
 ```
 ```
 chain https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/ipxe
