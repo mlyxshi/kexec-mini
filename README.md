@@ -1,6 +1,8 @@
 # Intro
 Based on [dep-sys/nix-dabei](https://github.com/dep-sys/nix-dabei/)
 
+[Build by Hydra](http://hydra.mlyxshi.com/jobset/kexec/build) 
+
 Modified for personal usage
 
 Only support btrfs and vfat
@@ -15,10 +17,7 @@ auto-install.service
     |
     v
 initrd.target(default)
-
 ```
-
-[Build by Hydra](http://hydra.mlyxshi.com/jobset/kexec/build) 
 # Usage
 ### From running linux distro
 ```
