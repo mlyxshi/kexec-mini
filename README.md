@@ -18,7 +18,7 @@ initrd.target(default)
 
 ```
 
-[Hydra](https://hydra.mlyxshi.com/jobset/kexec/build) 
+[Build by Hydra](https://hydra.mlyxshi.com/jobset/kexec/build) 
 # Usage
 ### From running linux distro
 ```
