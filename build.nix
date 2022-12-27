@@ -27,9 +27,9 @@ let
   kexecScript-x86_64 = pkgs.writeTextDir "script/kexec" (''
     #!/usr/bin/env bash
     set -e   
-    echo "Downloading kexec-musl-bin" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/kexec-bin && chmod +x ./kexec-bin
-    echo "Downloading initrd" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/initrd
-    echo "Downloading kernel" && curl -LO https://github.com/mlyxshi/kexec-mini/releases/download/latest/kernel
+    echo "Downloading kexec-musl-bin" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/x86_64/latest/download-by-type/file/kexec-bin && chmod +x ./kexec-bin
+    echo "Downloading initrd" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/x86_64/latest/download-by-type/file/initrd
+    echo "Downloading kernel" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/x86_64/latest/download-by-type/file/kernel
   '' + kexecScript-common);
 
   kexecScript-aarch64 = pkgs.writeTextDir "script/kexec" (''
@@ -42,8 +42,8 @@ let
 
   ipxeScript-x86_64 = pkgs.writeTextDir "script/ipxe" ''
     #!ipxe
-    kernel https://github.com/mlyxshi/kexec-mini/releases/download/latest/kernel initrd=initrd init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
-    initrd https://github.com/mlyxshi/kexec-mini/releases/download/latest/initrd
+    kernel https://hydra.mlyxshi.com/job/kexec/build/x86_64/latest/download-by-type/file/kernel initrd=initrd init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
+    initrd https://hydra.mlyxshi.com/job/kexec/build/x86_64/latest/download-by-type/file/kernel
     boot
   '';
 
@@ -55,34 +55,51 @@ let
   '';
 in
 {
-  system.build.x86_64 = pkgs.runCommand "kexec" { } ''
-    mkdir -p $out
-    ln -s ${config.system.build.kernel}/${kernelTarget}         $out/kernel
-    ln -s ${config.system.build.initialRamdisk}/initrd.zst      $out/initrd
-    ln -s ${kexecScript-x86_64}/script/kexec                    $out/kexec
-    ln -s ${ipxeScript-x86_64}/script/ipxe                      $out/ipxe
-    ln -s ${pkgs.pkgsStatic.kexec-tools}/bin/kexec              $out/kexec-bin
-  '';
 
-  system.build.aarch64 = pkgs.symlinkJoin {
-    name = "kexec";
-    paths = [
-      config.system.build.kernel
-      config.system.build.initialRamdisk
-      kexecScript-aarch64
-      ipxeScript-aarch64
-      pkgs.pkgsStatic.kexec-tools
-    ];
-    postBuild = ''
-      mkdir -p $out/nix-support
-      cat > $out/nix-support/hydra-build-products <<EOF
-      file initrd $out/initrd
-      file kernel $out/${kernelTarget}
-      file kexec $out/script/kexec
-      file ipex $out/script/ipxe
-      file kexec-bin $out/bin/kexec
-      EOF
-    '';
+  system.build = {
+
+    x86_64 = pkgs.symlinkJoin {
+      name = "kexec";
+      paths = [
+        config.system.build.kernel
+        config.system.build.initialRamdisk
+        kexecScript-x86_64
+        ipxeScript-x86_64
+        pkgs.pkgsStatic.kexec-tools
+      ];
+      postBuild = ''
+        mkdir -p $out/nix-support
+        cat > $out/nix-support/hydra-build-products <<EOF
+        file initrd $out/initrd
+        file kernel $out/${kernelTarget}
+        file kexec $out/script/kexec
+        file ipex $out/script/ipxe
+        file kexec-bin $out/bin/kexec
+        EOF
+      '';
+    };
+
+    aarch64 = pkgs.symlinkJoin {
+      name = "kexec";
+      paths = [
+        config.system.build.kernel
+        config.system.build.initialRamdisk
+        kexecScript-aarch64
+        ipxeScript-aarch64
+        pkgs.pkgsStatic.kexec-tools
+      ];
+      postBuild = ''
+        mkdir -p $out/nix-support
+        cat > $out/nix-support/hydra-build-products <<EOF
+        file initrd $out/initrd
+        file kernel $out/${kernelTarget}
+        file kexec $out/script/kexec
+        file ipex $out/script/ipxe
+        file kexec-bin $out/bin/kexec
+        EOF
+      '';
+    };
+
   };
 
 

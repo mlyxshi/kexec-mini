@@ -26,6 +26,7 @@
       packages.x86_64-linux.test0 = self.nixosConfigurations."kexec-x86_64".config.system.build.test0;
 
       hydraJobs.aarch64 = self.nixosConfigurations."kexec-aarch64".config.system.build.aarch64;
+      hydraJobs.x86_64 = self.nixosConfigurations."kexec-x86_64".config.system.build.x86_64;
       formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixpkgs-fmt;
     };
 
