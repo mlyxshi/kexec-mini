@@ -19,6 +19,7 @@ let
         break
       fi     
     done
+    
 
     ./kexec-bin --kexec-syscall-auto --load ./kernel --initrd=./initrd  --append "init=/bin/init ${toString config.boot.kernelParams} ssh_host_key=$ssh_host_key ssh_authorized_key=$ssh_authorized_key $*"
     ./kexec-bin -e
@@ -53,7 +54,7 @@ let
     initrd https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/initrd
     boot
   '';
-  
+
 in
 {
 
