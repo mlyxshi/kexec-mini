@@ -4,7 +4,7 @@ let
   kernelTarget = pkgs.hostPlatform.linux-kernel.target;
   arch = pkgs.hostPlatform.uname.processor;
 
-  kexecScript = pkgs.writeTextDir "script/kexec" ''
+  kexecScript = pkgs.writeTextDir "script/kexec-script" ''
     #!/usr/bin/env bash
     set -e   
     echo "Downloading kexec-musl-bin" && curl -LO http://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kexec-bin && chmod +x ./kexec-bin
@@ -32,7 +32,7 @@ let
     ./kexec-bin -e
   '';
 
-  ipxeScript = pkgs.writeTextDir "script/ipxe" ''
+  ipxeScript = pkgs.writeTextDir "script/ipxe-script" ''
     #!ipxe
     kernel http://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kernel initrd=initrd init=/bin/init ${toString config.boot.kernelParams} ''${cmdline}
     initrd http://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/initrd
@@ -54,8 +54,8 @@ in
       cat > $out/nix-support/hydra-build-products <<EOF
       file initrd $out/initrd
       file kernel $out/${kernelTarget}
-      file kexec $out/script/kexec
-      file ipxe $out/script/ipxe
+      file kexec $out/script/kexec-script
+      file ipxe $out/script/ipxe-script
       file kexec-bin $out/bin/kexec
       EOF
     '';
