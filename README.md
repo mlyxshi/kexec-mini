@@ -18,11 +18,11 @@ initrd.target(default)
 
 ```
 
-[Build by Hydra](https://hydra.mlyxshi.com/jobset/kexec/build) 
+[Build by Hydra](http://hydra.mlyxshi.com/jobset/kexec/build) 
 # Usage
 ### From running linux distro
 ```
-curl -sL https://hydra.mlyxshi.com/job/kexec/build/$(uname -m)/latest/download-by-type/file/kexec | bash -s
+curl -sL http://hydra.mlyxshi.com/job/kexec/build/$(uname -m)/latest/download-by-type/file/kexec | bash -s
 ```
 ### From netboot.xyz ipxe(Rescue)
 

@@ -7,9 +7,9 @@ let
   kexecScript = pkgs.writeTextDir "script/kexec" ''
     #!/usr/bin/env bash
     set -e   
-    echo "Downloading kexec-musl-bin" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kexec-bin && chmod +x ./kexec-bin
-    echo "Downloading initrd" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/initrd
-    echo "Downloading kernel" && curl -LO https://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kernel
+    echo "Downloading kexec-musl-bin" && curl -LO http://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kexec-bin && chmod +x ./kexec-bin
+    echo "Downloading initrd" && curl -LO http://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/initrd
+    echo "Downloading kernel" && curl -LO http://hydra.mlyxshi.com/job/kexec/build/${arch}/latest/download-by-type/file/kernel
 
     for i in /etc/ssh/ssh_host_ed25519_key /persist/etc/ssh/ssh_host_ed25519_key; do
       if [[ -e $i && -s $i ]]; then 
