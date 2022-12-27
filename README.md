@@ -39,10 +39,10 @@ exit
 set cmdline ssh_authorized_key=c3NoLWVkMjU1MTkgQUFBQUMzTnphQzFsWkRJMU5URTVBQUFBSU1wYVkzTHlDVzRISHFicDRTQTR0bkErMUJrZ3dydHJvMnMvREVzQmNQRGUKCg==
 ``` 
 ```
-chain https://hydra.mlyxshi.com/job/kexec/build/x86-64/latest/download-by-type/file/ipxe
+chain http://hydra.mlyxshi.com/job/kexec/build/x86_64/latest/download-by-type/file/ipxe
 ```
 ```
-chain https://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/ipxe
+chain http://hydra.mlyxshi.com/job/kexec/build/aarch64/latest/download-by-type/file/ipxe
 ```
 # Test
 ```
