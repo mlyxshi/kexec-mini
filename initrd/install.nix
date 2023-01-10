@@ -41,8 +41,8 @@ let
     mount -o subvol=persist,compress-force=zstd $NIXOS /mnt/persist
     
     nix-env --store /mnt -p /mnt/nix/var/nix/profiles/system --set $closure \
-    --extra-trusted-public-keys "cache.mlyxshi.com:qbWevQEhY/rV6wa21Jaivh+Lw2AArTFwCB2J6ll4xOI=" \
-    --extra-substituters "https://cache.mlyxshi.com" 
+    --extra-trusted-public-keys "nix:U4/UDPPRyDK76PjvBfJJs/4wXaIHQqxp4i9tHbNNjts=" \
+    --extra-substituters "https://attic.mlyxshi.com/nix" 
 
     mkdir -p /mnt/{etc,tmp}
     touch /mnt/etc/NIXOS
