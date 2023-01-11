@@ -3,7 +3,7 @@
 let
   installScript = ''
     flake=$(get-kernel-param flake)
-    [ ! -n "$host" ] && flake="github:mlyxshi/flake"                     # convenient for myself
+    [ ! -n "$flake" ] && flake="github:mlyxshi/flake"                     # convenient for myself
     
     host=$(get-kernel-param host)
     if [ -n "$host" ]
