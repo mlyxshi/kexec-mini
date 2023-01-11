@@ -12,9 +12,9 @@ let
       exit 1
     fi
 
-    # add extra 1.5G memory for evaluate nix config
+    # add extra 1G memory for evaluate nix config
     modprobe zram num_devices=1
-    zramctl --find --size 1536M
+    zramctl --find --size 1024M
     mkswap /dev/zram0
     swapon /dev/zram0
 
