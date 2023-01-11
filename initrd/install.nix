@@ -46,12 +46,8 @@ let
     mount -o subvol=nix,compress-force=zstd    $NIXOS /mnt/nix
     mount -o subvol=persist,compress-force=zstd $NIXOS /mnt/persist
     
-    exit 1
-    nix build --store /mnt github:mlyxshi/flake#nixosConfigurations.kr2.config.system.build.toplevel -L
-    nix-env --store /mnt -p /mnt/nix/var/nix/profiles/system --set $closure \
-    --extra-trusted-public-keys "nix:U4/UDPPRyDK76PjvBfJJs/4wXaIHQqxp4i9tHbNNjts=" \
-    --extra-substituters "https://attic.mlyxshi.com/nix" 
-
+    nix build -L --store /mnt --profile /mnt/nix/var/nix/profiles/system github:mlyxshi/flake#nixosConfigurations.$host.config.system.build.toplevel
+    
     mkdir -p /mnt/{etc,tmp}
     touch /mnt/etc/NIXOS
     [[ -n "$age_key" ]] && mkdir -p /mnt/persist/age/ && curl -sLo /mnt/persist/age/sshkey $age_key
