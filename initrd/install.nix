@@ -9,7 +9,7 @@ let
       echo $closure
     else
       echo "No host defined for auto-installer"
-      # exit 1
+      exit 1
     fi
 
     # add extra 1.5G memory for evaluate nix config
