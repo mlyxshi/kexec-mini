@@ -74,6 +74,7 @@
     awk = "${pkgs.gawk}/bin/awk";
     parted = "${pkgs.parted}/bin/parted";
     lsblk = "${pkgs.util-linux}/bin/lsblk";
+    zramctl = "${pkgs.util-linux}/bin/zramctl";
     curl = "${pkgs.curl}/bin/curl";
     lf = "${pkgs.lf}/bin/lf";
 
