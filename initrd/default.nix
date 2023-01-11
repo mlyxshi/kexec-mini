@@ -75,6 +75,8 @@
     parted = "${pkgs.parted}/bin/parted";
     lsblk = "${pkgs.util-linux}/bin/lsblk";
     zramctl = "${pkgs.util-linux}/bin/zramctl";
+    swapon = "${pkgs.util-linux}/bin/swapon";
+    mkswap = "${pkgs.util-linux}/bin/mkswap";
     curl = "${pkgs.curl}/bin/curl";
     lf = "${pkgs.lf}/bin/lf";
 
