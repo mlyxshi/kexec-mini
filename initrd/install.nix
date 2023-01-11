@@ -2,11 +2,11 @@
 { pkgs, lib, config, ... }:
 let
   installScript = ''
+    flake=$(get-kernel-param flake) || "github:mlyxshi/flake"
     host=$(get-kernel-param host)
     if [ -n "$host" ]
     then
-      closure=$(curl -sL https://github.com/mlyxshi/install/releases/download/latest/$host)
-      echo $closure
+      echo "Nix will build: $flake#nixosConfigurations.$host.config.system.build.toplevel"
     else
       echo "No host defined for auto-installer"
       exit 1
@@ -46,7 +46,7 @@ let
     mount -o subvol=nix,compress-force=zstd    $NIXOS /mnt/nix
     mount -o subvol=persist,compress-force=zstd $NIXOS /mnt/persist
     
-    nix build -L --store /mnt --profile /mnt/nix/var/nix/profiles/system github:mlyxshi/flake#nixosConfigurations.$host.config.system.build.toplevel
+    nix build -L --store /mnt --profile /mnt/nix/var/nix/profiles/system $flake#nixosConfigurations.$host.config.system.build.toplevel
     
     mkdir -p /mnt/{etc,tmp}
     touch /mnt/etc/NIXOS
