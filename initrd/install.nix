@@ -2,7 +2,9 @@
 { pkgs, lib, config, ... }:
 let
   installScript = ''
-    flake=$(get-kernel-param flake) || "github:mlyxshi/flake"
+    flake=$(get-kernel-param flake)
+    [ ! -n "$host" ] && flake="github:mlyxshi/flake"                     # convenient for myself
+    
     host=$(get-kernel-param host)
     if [ -n "$host" ]
     then
