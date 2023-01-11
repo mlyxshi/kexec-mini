@@ -9,8 +9,14 @@ let
       echo $closure
     else
       echo "No host defined for auto-installer"
-      exit 1
+      # exit 1
     fi
+
+    # add extra 1.5G memory for evaluate nix config
+    modprobe zram num_devices=1
+    zramctl --find --size 1536M
+    mkswap /dev/zram0
+    swapon /dev/zram0
 
     tg_id=$(get-kernel-param tg_id)
     tg_token=$(get-kernel-param tg_token)
@@ -40,6 +46,8 @@ let
     mount -o subvol=nix,compress-force=zstd    $NIXOS /mnt/nix
     mount -o subvol=persist,compress-force=zstd $NIXOS /mnt/persist
     
+    exit 1
+    nix build --store /mnt github:mlyxshi/flake#nixosConfigurations.kr2.config.system.build.toplevel -L
     nix-env --store /mnt -p /mnt/nix/var/nix/profiles/system --set $closure \
     --extra-trusted-public-keys "nix:U4/UDPPRyDK76PjvBfJJs/4wXaIHQqxp4i9tHbNNjts=" \
     --extra-substituters "https://attic.mlyxshi.com/nix" 

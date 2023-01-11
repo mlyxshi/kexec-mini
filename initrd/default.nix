@@ -10,11 +10,11 @@
     "resolv.conf".text = "nameserver 1.1.1.1\n"; # TODO replace with systemd-resolved upstream
     "ssl/certs/ca-certificates.crt".source = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
     "nix/nix.conf".text = ''
-      extra-experimental-features = nix-command flakes
+      extra-experimental-features = nix-command flakes auto-allocate-uids
+      auto-allocate-uids = true
       substituters = https://cache.nixos.org
       trusted-public-keys = cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=
       fallback = true
-      build-users-group =
     '';
     "group".text = ''
       root:x:0:
